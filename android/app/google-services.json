@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "735404252029",
+    "project_id": "sgs-create",
+    "storage_bucket": "sgs-create.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735404252029:android:f27f570eba8c13837d8a14",
+        "android_client_info": {
+          "package_name": "com.example.school_responsive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735404252029-8gne6orh22tg26nk0l461urga4f9krtg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChCfdx6rR7SqG_6Izkadv_pyVLVjrwHww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735404252029-8gne6orh22tg26nk0l461urga4f9krtg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
