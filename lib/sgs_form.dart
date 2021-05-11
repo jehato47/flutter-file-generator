@@ -1,8 +1,6 @@
-import 'provider/try_provider.dart';
+import 'package:school_responsive/provider/sgs_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +18,7 @@ class SgsForm extends StatefulWidget {
 }
 
 class _SgsFormState extends State<SgsForm> {
+  File file;
   FilePickerResult result;
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -28,60 +27,8 @@ class _SgsFormState extends State<SgsForm> {
       ? await launch(_url)
       : throw 'Could not launch $_url';
 
-  Future<void> sendFormm(FilePickerResult result) async {
-    var dio = Dio();
-    dio.options.baseUrl = 'https://jehat22.pythonanywhere.com/';
-    var _formData;
+  Map formData = {};
 
-    if (kIsWeb) {
-      _formData = FormData.fromMap({
-        'exporterCompany': formData["exporterCompany"],
-        'exporterAddress': formData["exporterAddress"],
-        'contactPerson': 'KENDAL DENIZ',
-        'email': 'kendalkendalo@hotmail.com',
-        'phone': '00905325664883',
-        'importerCompany': formData["importerCompany"],
-        'importerAddress': formData["importerAddress"],
-        'invoiceNoDate': formData["invoiceNoDate"],
-        'vinNumber': formData["vinNumber"],
-        'invoice': MultipartFile.fromBytes(
-          result.files.single.bytes,
-          filename: result.files.single.name,
-        ),
-      });
-    } else {
-      _formData = FormData.fromMap({
-        'exporterCompany': formData["exporterCompany"],
-        'exporterAddress': formData["exporterAddress"],
-        'contactPerson': 'KENDAL DENIZ',
-        'email': 'kendalkendalo@hotmail.com',
-        'phone': '00905325664883',
-        'importerCompany': formData["importerCompany"],
-        'importerAddress': formData["importerAddress"],
-        'invoiceNoDate': formData["invoiceNoDate"],
-        'vinNumber': formData["vinNumber"],
-        'invoice': MultipartFile.fromFile(
-          result.files.single.path,
-          filename: "qwe.jpeg",
-        ),
-      });
-    }
-
-    print(_formData.fields);
-    try {
-      var response = await dio.post(
-        '/sgs/createsgs',
-        data: _formData,
-      );
-      print(response);
-    } catch (err) {
-      print(err);
-    }
-  }
-
-  Map formData = {
-    // "companyName":
-  };
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -148,64 +95,86 @@ class _SgsFormState extends State<SgsForm> {
                               isLoading = true;
                             });
                             if (result != null) {
-                              await sendFormm(result);
+                              if (kIsWeb) {
+                                print(12);
+                                await Provider.of<Sgs>(context)
+                                    .sendFormm(formData, result);
+                              } else {
+                                print(13);
+                                final bytes = await file.readAsBytes();
+                                print(bytes.length);
+                                // return;
+                                await Provider.of<Sgs>(context)
+                                    .sendFormMobile(formData, bytes);
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Oluşturuldu indirme başlıyor"),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
                             } else {}
+
                             setState(() {
                               isLoading = false;
                             });
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Oluşturuldu indirme başlıyor"),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-                            await Provider.of<Core>(context)
+                            final url = await Provider.of<Core>(context)
                                 .getPdfUrl(formData["vinNumber"]);
+
+                            DocumentSnapshot snapshot = await FirebaseFirestore
+                                .instance
+                                .collection("files")
+                                .doc(formData["vinNumber"])
+                                .get();
+
+                            if (snapshot.exists)
+                              await FirebaseFirestore.instance
+                                  .collection("files")
+                                  .doc(formData["vinNumber"])
+                                  .update({
+                                'date': DateTime.now(),
+                                'exporterCompany': formData["exporterCompany"],
+                                'exporterAddress': formData["exporterAddress"],
+                                'contactPerson': 'KENDAL DENIZ',
+                                'email': 'kendalkendalo@hotmail.com',
+                                'phone': '00905325664883',
+                                'importerCompany': formData["importerCompany"],
+                                'importerAddress': formData["importerAddress"],
+                                'invoiceNoDate': formData["invoiceNoDate"],
+                                'vinNumber': formData["vinNumber"],
+                                'pdfUrl': url,
+                              });
+                            else {
+                              await FirebaseFirestore.instance
+                                  .collection("files")
+                                  .doc(formData["vinNumber"])
+                                  .set({
+                                'date': DateTime.now(),
+                                'exporterCompany': formData["exporterCompany"],
+                                'exporterAddress': formData["exporterAddress"],
+                                'contactPerson': 'KENDAL DENIZ',
+                                'email': 'kendalkendalo@hotmail.com',
+                                'phone': '00905325664883',
+                                'importerCompany': formData["importerCompany"],
+                                'importerAddress': formData["importerAddress"],
+                                'invoiceNoDate': formData["invoiceNoDate"],
+                                'vinNumber': formData["vinNumber"],
+                                'pdfUrl': url,
+                              });
+                            }
                           },
                           child: Text("kaydet"),
                         ),
                   TextButton(
                     child: Text("Pick File"),
                     onPressed: () async {
-                      _formKey.currentState.save();
-                      FilePickerResult result =
-                          await FilePicker.platform.pickFiles();
-                      File file;
-                      if (result != null) {
+                      result = await FilePicker.platform.pickFiles();
+
+                      if (!kIsWeb && result != null) {
                         file = File(result.files.single.path);
                       } else {
                         // User canceled the picker
-                      }
-                      print(file.path);
-                      // return;
-                      var dio = Dio();
-                      dio.options.baseUrl =
-                          'https://jehat22.pythonanywhere.com';
-                      var __formData;
-                      __formData = FormData.fromMap({
-                        'exporterCompany': 'formData["exporterCompany"]',
-                        'exporterAddress': 'formData["exporterAddress"]',
-                        'contactPerson': 'KENDAL DENIZ',
-                        'email': 'kendalkendalo@hotmail.com',
-                        'phone': '00905325664883',
-                        'importerCompany': 'formData["importerCompany"]',
-                        'importerAddress': 'formData["importerAddress"]',
-                        'invoiceNoDate': 'formData["invoiceNoDate"]',
-                        'vinNumber': 'formData["vinNumber"]',
-                        'invoice': MultipartFile.fromFile(
-                          file.path,
-                          filename: file.path.split("/").last,
-                        ),
-                      });
-                      try {
-                        var response = await dio.post(
-                          '/sgs/createsgs',
-                          data: __formData,
-                        );
-                        print(response);
-                      } catch (err) {
-                        print(err);
                       }
                     },
                   )

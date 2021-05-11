@@ -23,7 +23,6 @@ class _FileListScreenState extends State<FileListScreen> {
 
         final data = snapshot.data.docs;
 
-        print(data);
         return ListView.builder(
           itemCount: data.length,
           itemBuilder: (context, index) => Slidable(

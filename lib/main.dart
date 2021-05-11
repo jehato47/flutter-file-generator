@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:school_responsive/provider/sgs_provider.dart';
 import 'sgs_form.dart';
 import 'provider/core_provider.dart';
-import 'provider/try_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'bottom_navbar.dart';
 
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           create: (context) => Core(),
         ),
         ChangeNotifierProvider(
-          create: (context) => Try(),
+          create: (context) => Sgs(),
         ),
       ],
       child: MaterialApp(
