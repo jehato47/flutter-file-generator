@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:school_responsive/file_detail_screen.dart';
 import 'provider/core_provider.dart';
 
 class FileListScreen extends StatefulWidget {
@@ -63,6 +64,10 @@ class _FileListScreenState extends State<FileListScreen> {
                 ),
             ],
             child: ListTile(
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(FileDetailScreen.url, arguments: data[index]);
+              },
               title: Text(data[index]["vinNumber"]),
             ),
             actionPane: SlidableDrawerActionPane(),

@@ -17,6 +17,7 @@ class Auth extends ChangeNotifier {
 
   Future<void> signIn(String email, String password) async {
     FirebaseAuth auth = FirebaseAuth.instance;
+
     try {
       UserCredential credential = await auth.signInWithEmailAndPassword(
           email: email, password: password);

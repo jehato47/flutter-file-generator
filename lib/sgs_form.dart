@@ -136,6 +136,7 @@ class _SgsFormState extends State<SgsForm> {
                                   .collection("files")
                                   .doc(formData["vinNumber"])
                                   .update({
+                                'pdf': true,
                                 'date': DateTime.now(),
                                 'exporterCompany': formData["exporterCompany"],
                                 'exporterAddress': formData["exporterAddress"],
@@ -154,6 +155,8 @@ class _SgsFormState extends State<SgsForm> {
                                   .collection("files")
                                   .doc(formData["vinNumber"])
                                   .set({
+                                'pdf': true,
+                                'xlsx': false,
                                 'date': DateTime.now(),
                                 'exporterCompany': formData["exporterCompany"],
                                 'exporterAddress': formData["exporterAddress"],

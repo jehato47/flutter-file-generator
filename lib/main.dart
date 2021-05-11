@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'bottom_navbar.dart';
 import 'login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'file_detail_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        routes: {
+          FileDetailScreen.url: (context) => FileDetailScreen(),
+        },
         debugShowCheckedModeBanner: false,
         title: 'SGS GENERATOR',
         theme: ThemeData(
@@ -56,13 +60,14 @@ class MyApp extends StatelessWidget {
                   // * TODO : Login Form da setState hatası veriyor bak
                   if (snapshot.connectionState == ConnectionState.waiting)
                     return Center(child: CircularProgressIndicator());
-                  if (snapshot.hasData) {
-                    // todo : Öğrenci ve Öğretmen eklerken resim urlsini ekle de kaydet
-                    // todo : Yoklama Ekranında Öğreninin detaylarını göstermeyi hallet
-                    // todo : Sınav sonuç ekranında detay pop-up ını bitir
-                    // ? todo : Sınav cevap kağıdını göstermeyi hallet
-                    return LoginScreen();
-                  }
+                  // if (snapshot.hasData) {
+                  //   // todo : Öğrenci ve Öğretmen eklerken resim urlsini ekle de kaydet
+                  //   // todo : Yoklama Ekranında Öğreninin detaylarını göstermeyi hallet
+                  //   // todo : Sınav sonuç ekranında detay pop-up ını bitir
+                  //   // ? todo : Sınav cevap kağıdını göstermeyi hallet
+                  //   return LoginScreen();
+                  // }
+
                   return LoginScreen();
                 },
               );

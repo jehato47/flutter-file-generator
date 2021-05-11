@@ -107,6 +107,7 @@ class _XlsxFormState extends State<XlsxForm> {
                             .collection("files")
                             .doc(formData["vinNumber"])
                             .update({
+                          'xlsx': true,
                           'carBrand': formData["carBrand"],
                           'carModel': formData["carModel"],
                           'carYear': formData["carYear"],
@@ -121,6 +122,8 @@ class _XlsxFormState extends State<XlsxForm> {
                             .collection("files")
                             .doc(formData["vinNumber"])
                             .set({
+                          'pdf': false,
+                          'xlsx': true,
                           'date': DateTime.now(),
                           'carBrand': formData["carBrand"],
                           'carModel': formData["carModel"],
