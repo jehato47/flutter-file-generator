@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'provider/core_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class XlsxForm extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class _XlsxFormState extends State<XlsxForm> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
     return Padding(
       padding: EdgeInsets.all(20),
       child: Form(
@@ -78,7 +80,8 @@ class _XlsxFormState extends State<XlsxForm> {
                       _formKey.currentState.save();
                       print(formData);
 
-                      await Provider.of<Core>(context).createXlsx(formData);
+                      await Provider.of<Core>(context, listen: false)
+                          .createXlsx(formData);
                       setState(() {
                         isLoading = false;
                       });
@@ -89,8 +92,9 @@ class _XlsxFormState extends State<XlsxForm> {
                         ),
                       );
 
-                      final url = await Provider.of<Core>(context)
-                          .getXlsxUrl(formData["vinNumber"]);
+                      final url =
+                          await Provider.of<Core>(context, listen: false)
+                              .getXlsxUrl(formData["vinNumber"]);
 
                       DocumentSnapshot snapshot = await FirebaseFirestore
                           .instance
@@ -110,6 +114,7 @@ class _XlsxFormState extends State<XlsxForm> {
                           'country': formData['country'],
                           'vinNumber': formData['vinNumber'],
                           'url': url,
+                          'uid': auth.currentUser.uid,
                         });
                       else {
                         await FirebaseFirestore.instance
@@ -124,6 +129,7 @@ class _XlsxFormState extends State<XlsxForm> {
                           'country': formData['country'],
                           'vinNumber': formData['vinNumber'],
                           'url': url,
+                          'uid': auth.currentUser.uid,
                         });
                       }
                     },

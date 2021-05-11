@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SgsForm extends StatefulWidget {
   @override
@@ -31,6 +32,7 @@ class _SgsFormState extends State<SgsForm> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
     return Padding(
       padding: EdgeInsets.all(20),
       child: Form(
@@ -97,14 +99,14 @@ class _SgsFormState extends State<SgsForm> {
                             if (result != null) {
                               if (kIsWeb) {
                                 print(12);
-                                await Provider.of<Sgs>(context)
+                                await Provider.of<Sgs>(context, listen: false)
                                     .sendFormm(formData, result);
                               } else {
                                 print(13);
                                 final bytes = await file.readAsBytes();
                                 print(bytes.length);
                                 // return;
-                                await Provider.of<Sgs>(context)
+                                await Provider.of<Sgs>(context, listen: false)
                                     .sendFormMobile(formData, bytes);
                               }
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -119,8 +121,9 @@ class _SgsFormState extends State<SgsForm> {
                               isLoading = false;
                             });
 
-                            final url = await Provider.of<Core>(context)
-                                .getPdfUrl(formData["vinNumber"]);
+                            final url =
+                                await Provider.of<Core>(context, listen: false)
+                                    .getPdfUrl(formData["vinNumber"]);
 
                             DocumentSnapshot snapshot = await FirebaseFirestore
                                 .instance
@@ -144,6 +147,7 @@ class _SgsFormState extends State<SgsForm> {
                                 'invoiceNoDate': formData["invoiceNoDate"],
                                 'vinNumber': formData["vinNumber"],
                                 'pdfUrl': url,
+                                'uid': auth.currentUser.uid,
                               });
                             else {
                               await FirebaseFirestore.instance
@@ -161,6 +165,7 @@ class _SgsFormState extends State<SgsForm> {
                                 'invoiceNoDate': formData["invoiceNoDate"],
                                 'vinNumber': formData["vinNumber"],
                                 'pdfUrl': url,
+                                'uid': auth.currentUser.uid,
                               });
                             }
                           },

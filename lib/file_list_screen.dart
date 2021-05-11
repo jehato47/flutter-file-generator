@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -10,11 +11,16 @@ class FileListScreen extends StatefulWidget {
 }
 
 class _FileListScreenState extends State<FileListScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection("files")
+          .where(
+            "uid",
+            isEqualTo: auth.currentUser.uid,
+          )
           .orderBy("date", descending: true)
           .snapshots(),
       builder: (context, snapshot) {
@@ -22,6 +28,14 @@ class _FileListScreenState extends State<FileListScreen> {
           return Center(child: CircularProgressIndicator());
 
         final data = snapshot.data.docs;
+        if (data.length == 0) {
+          return Center(
+            child: Text(
+              "Henüz dosya yok. Oluşturuğunuz dosyaları burada görebilirsiniz.",
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
 
         return ListView.builder(
           itemCount: data.length,
@@ -33,7 +47,7 @@ class _FileListScreenState extends State<FileListScreen> {
                   icon: Icons.assignment,
                   color: Colors.red,
                   onTap: () async {
-                    await Provider.of<Core>(context)
+                    await Provider.of<Core>(context, listen: false)
                         .getPdfUrl(data[index]["vinNumber"]);
                   },
                 ),
@@ -43,7 +57,7 @@ class _FileListScreenState extends State<FileListScreen> {
                   icon: Icons.assignment,
                   color: Colors.green,
                   onTap: () async {
-                    await Provider.of<Core>(context)
+                    await Provider.of<Core>(context, listen: false)
                         .getXlsxUrl(data[index]["vinNumber"]);
                   },
                 ),
