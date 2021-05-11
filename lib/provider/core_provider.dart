@@ -25,7 +25,7 @@ class Core extends ChangeNotifier {
     print(response);
   }
 
-  Future<void> getXlsxUrl(String vinN) async {
+  Future<String> getXlsxUrl(String vinN) async {
     firebase_storage.FirebaseStorage storage =
         firebase_storage.FirebaseStorage.instance;
 
@@ -37,9 +37,11 @@ class Core extends ChangeNotifier {
         : throw 'Could not launch $_url';
 
     _launchURL(response);
+
+    return response;
   }
 
-  Future<void> getPdfUrl(String vinN) async {
+  Future<String> getPdfUrl(String vinN) async {
     firebase_storage.FirebaseStorage storage =
         firebase_storage.FirebaseStorage.instance;
 
@@ -51,5 +53,6 @@ class Core extends ChangeNotifier {
         : throw 'Could not launch $_url';
 
     _launchURL(response);
+    return response;
   }
 }

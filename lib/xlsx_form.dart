@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'provider/core_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class XlsxForm extends StatefulWidget {
   @override
@@ -81,8 +82,50 @@ class _XlsxFormState extends State<XlsxForm> {
                       setState(() {
                         isLoading = false;
                       });
-                      await Provider.of<Core>(context)
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Oluşturuldu indirme başlıyor"),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+
+                      final url = await Provider.of<Core>(context)
                           .getXlsxUrl(formData["vinNumber"]);
+
+                      DocumentSnapshot snapshot = await FirebaseFirestore
+                          .instance
+                          .collection("files")
+                          .doc(formData["vinNumber"])
+                          .get();
+
+                      if (snapshot.exists)
+                        await FirebaseFirestore.instance
+                            .collection("files")
+                            .doc(formData["vinNumber"])
+                            .update({
+                          'carBrand': formData["carBrand"],
+                          'carModel': formData["carModel"],
+                          'carYear': formData["carYear"],
+                          'old': formData['old'],
+                          'country': formData['country'],
+                          'vinNumber': formData['vinNumber'],
+                          'url': url,
+                        });
+                      else {
+                        await FirebaseFirestore.instance
+                            .collection("files")
+                            .doc(formData["vinNumber"])
+                            .set({
+                          'date': DateTime.now(),
+                          'carBrand': formData["carBrand"],
+                          'carModel': formData["carModel"],
+                          'carYear': formData["carYear"],
+                          'old': formData['old'],
+                          'country': formData['country'],
+                          'vinNumber': formData['vinNumber'],
+                          'url': url,
+                        });
+                      }
                     },
                     child: Text("btn"),
                   )

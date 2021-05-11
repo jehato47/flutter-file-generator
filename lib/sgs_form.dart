@@ -140,8 +140,48 @@ class _SgsFormState extends State<SgsForm> {
                                 backgroundColor: Colors.green,
                               ),
                             );
-                            await Provider.of<Core>(context)
+                            final url = await Provider.of<Core>(context)
                                 .getPdfUrl(formData["vinNumber"]);
+                            DocumentSnapshot snapshot = await FirebaseFirestore
+                                .instance
+                                .collection("files")
+                                .doc(formData["vinNumber"])
+                                .get();
+                            if (snapshot.exists) {
+                              print(122);
+                              await FirebaseFirestore.instance
+                                  .collection("files")
+                                  .doc(formData["vinNumber"])
+                                  .update({
+                                'exporterCompany': formData["exporterCompany"],
+                                'exporterAddress': formData["exporterAddress"],
+                                'contactPerson': 'KENDAL DENIZ',
+                                'email': 'kendalkendalo@hotmail.com',
+                                'phone': '00905325664883',
+                                'importerCompany': formData["importerCompany"],
+                                'importerAddress': formData["importerAddress"],
+                                'invoiceNoDate': formData["invoiceNoDate"],
+                                'vinNumber': formData["vinNumber"],
+                                'pdfUrl': url,
+                              });
+                            } else {
+                              await FirebaseFirestore.instance
+                                  .collection("files")
+                                  .doc(formData["vinNumber"])
+                                  .set({
+                                'date': DateTime.now(),
+                                'exporterCompany': formData["exporterCompany"],
+                                'exporterAddress': formData["exporterAddress"],
+                                'contactPerson': 'KENDAL DENIZ',
+                                'email': 'kendalkendalo@hotmail.com',
+                                'phone': '00905325664883',
+                                'importerCompany': formData["importerCompany"],
+                                'importerAddress': formData["importerAddress"],
+                                'invoiceNoDate': formData["invoiceNoDate"],
+                                'vinNumber': formData["vinNumber"],
+                                'pdfUrl': url,
+                              });
+                            }
                           },
                           child: Text("kaydet"),
                         ),
