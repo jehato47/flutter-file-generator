@@ -26,6 +26,12 @@ class _XlsxFormState extends State<XlsxForm> {
           children: [
             Text("Excel File Info"),
             TextFormField(
+              validator: (value) {
+                print(value);
+                if (value == "") return "Markayı Girin";
+
+                return null;
+              },
               textInputAction: TextInputAction.next,
               onSaved: (newValue) {
                 formData["carBrand"] = newValue;
@@ -33,6 +39,11 @@ class _XlsxFormState extends State<XlsxForm> {
               decoration: InputDecoration(labelText: "car brand"),
             ),
             TextFormField(
+              validator: (value) {
+                if (value == "") return "Modeli Girin";
+
+                return null;
+              },
               textInputAction: TextInputAction.next,
               onSaved: (newValue) {
                 formData["carModel"] = newValue;
@@ -41,19 +52,53 @@ class _XlsxFormState extends State<XlsxForm> {
             ),
             TextFormField(
               textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.number,
               onSaved: (newValue) {
                 formData["carYear"] = newValue;
+              },
+              validator: (value) {
+                dynamic v;
+
+                v = int.tryParse(value);
+                if (v == null) return "Sayı Girin";
+
+                return null;
               },
               decoration: InputDecoration(labelText: "car year"),
             ),
             TextFormField(
+              keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
+              // onChanged: (value) {
+              //   dynamic v;
+              //   try {
+              //     v = int.tryParse(value);
+              //     print(v);
+              //     return
+              //   } catch (err) {
+              //     print(err);
+              //   }
+              //   print(v);
+              // },
+              validator: (value) {
+                dynamic v;
+
+                v = int.tryParse(value);
+                if (v == null) return "Sayı Girin";
+
+                return null;
+              },
               onSaved: (newValue) {
                 formData["old"] = newValue;
               },
               decoration: InputDecoration(labelText: "old"),
             ),
             TextFormField(
+              validator: (value) {
+                if (value == "") return "Ülkeyi Girin";
+
+                return null;
+              },
               textInputAction: TextInputAction.next,
               onSaved: (newValue) {
                 formData["country"] = newValue;
@@ -61,6 +106,11 @@ class _XlsxFormState extends State<XlsxForm> {
               decoration: InputDecoration(labelText: "country"),
             ),
             TextFormField(
+              validator: (value) {
+                if (value == "") return "Vin Numarasını Girin";
+
+                return null;
+              },
               textInputAction: TextInputAction.next,
               onSaved: (newValue) {
                 formData["vinNumber"] = newValue;
@@ -74,6 +124,11 @@ class _XlsxFormState extends State<XlsxForm> {
                   )
                 : ElevatedButton(
                     onPressed: () async {
+                      bool isValid = _formKey.currentState.validate();
+                      print(isValid);
+                      if (!isValid) return;
+
+                      // return;
                       setState(() {
                         isLoading = true;
                       });

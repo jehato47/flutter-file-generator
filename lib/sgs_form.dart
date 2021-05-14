@@ -44,6 +44,11 @@ class _SgsFormState extends State<SgsForm> {
                 children: [
                   Text("Exporter"),
                   TextFormField(
+                    validator: (value) {
+                      if (value == "") return "Firma Ismini Girin";
+
+                      return null;
+                    },
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(labelText: "company name"),
                     onSaved: (newValue) {
@@ -51,6 +56,11 @@ class _SgsFormState extends State<SgsForm> {
                     },
                   ),
                   TextFormField(
+                    validator: (value) {
+                      if (value == "") return "Adresi Girin";
+
+                      return null;
+                    },
                     textInputAction: TextInputAction.next,
                     onSaved: (newValue) {
                       formData["exporterAddress"] = newValue;
@@ -60,6 +70,11 @@ class _SgsFormState extends State<SgsForm> {
                   SizedBox(height: 20),
                   Text("Importer"),
                   TextFormField(
+                    validator: (value) {
+                      if (value == "") return "Firma Ismini Girin";
+
+                      return null;
+                    },
                     textInputAction: TextInputAction.next,
                     onSaved: (newValue) {
                       formData["importerCompany"] = newValue;
@@ -67,6 +82,11 @@ class _SgsFormState extends State<SgsForm> {
                     decoration: InputDecoration(labelText: "company name"),
                   ),
                   TextFormField(
+                    validator: (value) {
+                      if (value == "") return "Adresi Girin";
+
+                      return null;
+                    },
                     textInputAction: TextInputAction.next,
                     onSaved: (newValue) {
                       formData["importerAddress"] = newValue;
@@ -74,6 +94,11 @@ class _SgsFormState extends State<SgsForm> {
                     decoration: InputDecoration(labelText: "company address"),
                   ),
                   TextFormField(
+                    validator: (value) {
+                      if (value == "") return "Invoice No ve Date Girin";
+
+                      return null;
+                    },
                     textInputAction: TextInputAction.next,
                     onSaved: (newValue) {
                       formData["invoiceNoDate"] = newValue;
@@ -81,6 +106,11 @@ class _SgsFormState extends State<SgsForm> {
                     decoration: InputDecoration(labelText: "invoiceNoDate"),
                   ),
                   TextFormField(
+                    validator: (value) {
+                      if (value == "") return "Vın Numarasını Girin";
+
+                      return null;
+                    },
                     textInputAction: TextInputAction.next,
                     onSaved: (newValue) {
                       formData["vinNumber"] = newValue;
@@ -92,6 +122,15 @@ class _SgsFormState extends State<SgsForm> {
                       ? Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                           onPressed: () async {
+                            bool isValid = _formKey.currentState.validate();
+                            if (result == null)
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.red,
+                                  content: Text("Resim Seçin"),
+                                ),
+                              );
+                            if (!isValid) return;
                             _formKey.currentState.save();
                             setState(() {
                               isLoading = true;
