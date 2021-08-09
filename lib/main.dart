@@ -32,6 +32,8 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        themeMode: ThemeMode.dark,
+        darkTheme: ThemeData.dark(),
         routes: {
           FileDetailScreen.url: (context) => FileDetailScreen(),
         },
