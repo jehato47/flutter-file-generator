@@ -32,6 +32,13 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        themeMode: ThemeMode.dark,
+        darkTheme: ThemeData.dark().copyWith(
+            // primaryColorDark: Colors.red,
+            // brightness: Brightness.dark,
+            // accentColor: Colors.amber,
+            // buttonColor: Colors.indigo,
+            ),
         routes: {
           FileDetailScreen.url: (context) => FileDetailScreen(),
         },

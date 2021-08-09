@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'mail_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +17,8 @@ class _FileDetailScreenState extends State<FileDetailScreen> {
     bool havePdf = args["pdf"];
     print(haveXlsx);
     print(havePdf);
+    bool pdfon = havePdf;
+    bool xlsxon = haveXlsx;
     // print(args.data());
     // print(args.length);
     List xlsx = [];
@@ -123,7 +125,19 @@ class _FileDetailScreenState extends State<FileDetailScreen> {
       ];
     }
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (context) => MailDialog(args),
+                );
+              },
+              icon: Icon(Icons.mail),
+            ),
+          ],
+        ),
         body: Padding(
           padding: EdgeInsets.all(20),
           // child: Text("qwe"),

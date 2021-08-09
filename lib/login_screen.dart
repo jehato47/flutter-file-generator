@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:school_responsive/bottom_navbar.dart';
+import 'package:school_responsive/file_list_screen.dart';
+import 'package:school_responsive/firebase.dart';
 // import 'dashboard_screen.dart';
 import 'provider/auth_provider.dart';
 import 'package:provider/provider.dart';
@@ -53,6 +55,14 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
+      theme: LoginTheme(textFieldStyle: TextStyle(color: Colors.white)),
+      messages: LoginMessages(
+        usernameHint: "Kullanıcı Adı",
+        passwordHint: "Şifre",
+        flushbarTitleError: "Hata",
+        loginButton: "Giriş Yap",
+        signupButton: "Kayıt Ol",
+      ),
       title: 'Sgs Generator',
       // logo: 'assets/images/ecorp-lightblue.png',
       hideForgotPasswordButton: true,
@@ -66,7 +76,7 @@ class LoginScreen extends StatelessWidget {
       },
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => BottomNavbarScreen(),
+          builder: (context) => FileListScreen(),
         ));
       },
       onRecoverPassword: _recoverPassword,
