@@ -1,6 +1,6 @@
 # school_responsive
 
-A new Flutter project.
+My Project to Simplyf Creating Sgs Files.
 
 ## Getting Started
 
