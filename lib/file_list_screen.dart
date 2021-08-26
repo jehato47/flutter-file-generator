@@ -63,6 +63,24 @@ class _FileListScreenState extends State<FileListScreen> {
                   },
                 ),
             ],
+            secondaryActions: [
+              if (data[index].data().containsKey("pdfUrl"))
+                IconSlideAction(
+                  caption: "delete pdf",
+                  icon: Icons.assignment,
+                  color: Colors.amber,
+                  onTap: () async {
+                    // FirebaseFirestore.instance.collection("collectionPath")
+                  },
+                ),
+              if (data[index].data().containsKey("url"))
+                IconSlideAction(
+                  caption: "delete xlsx",
+                  icon: Icons.assignment,
+                  color: Colors.teal,
+                  onTap: () async {},
+                ),
+            ],
             child: ListTile(
               onTap: () {
                 Navigator.of(context)

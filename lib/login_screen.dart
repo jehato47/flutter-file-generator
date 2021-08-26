@@ -76,7 +76,7 @@ class LoginScreen extends StatelessWidget {
       },
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => FileListScreen(),
+          builder: (context) => BottomNavbarScreen(),
         ));
       },
       onRecoverPassword: _recoverPassword,
