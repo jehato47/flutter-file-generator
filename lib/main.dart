@@ -58,6 +58,10 @@ class MyApp extends StatelessWidget {
 
             // Once complete, show your application
             if (snapshot.connectionState == ConnectionState.done) {
+              if (FirebaseAuth.instance.currentUser == null)
+                return LoginScreen();
+              else
+                return BottomNavbarScreen();
               return StreamBuilder(
                 // TODO: login, logout, signup yapıldıgında bu stream değişecek
                 // TODO: onAuthstateChanged -> authStateChanges

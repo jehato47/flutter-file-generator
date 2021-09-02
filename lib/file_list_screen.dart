@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -64,22 +65,62 @@ class _FileListScreenState extends State<FileListScreen> {
                 ),
             ],
             secondaryActions: [
-              if (data[index].data().containsKey("pdfUrl"))
-                IconSlideAction(
-                  caption: "delete pdf",
-                  icon: Icons.assignment,
-                  color: Colors.amber,
-                  onTap: () async {
-                    // FirebaseFirestore.instance.collection("collectionPath")
-                  },
-                ),
-              if (data[index].data().containsKey("url"))
-                IconSlideAction(
-                  caption: "delete xlsx",
-                  icon: Icons.assignment,
-                  color: Colors.teal,
-                  onTap: () async {},
-                ),
+              // if (data[index].data().containsKey("pdfUrl"))
+              IconSlideAction(
+                caption: "Sil",
+                icon: Icons.assignment,
+                color: Colors.amber,
+                onTap: () async {
+                  var a = 0;
+                  await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      content: Text("Kesin mi?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            a = 1;
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("evet"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            a = 0;
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("hayır"),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (a == 1) {
+                    final vin = data[index]["vinNumber"];
+                    if (data[index].data().containsKey("pdfUrl"))
+                      await FirebaseStorage.instance
+                          .ref("$vin/$vin.pdf")
+                          .delete();
+
+                    if (data[index].data().containsKey("url"))
+                      await FirebaseStorage.instance
+                          .ref("$vin/$vin.xlsx")
+                          .delete();
+
+                    await FirebaseFirestore.instance
+                        .collection("files")
+                        .doc(vin)
+                        .delete();
+                  }
+                },
+              ),
+              // if (data[index].data().containsKey("url"))
+              //   IconSlideAction(
+              //     caption: "delete xlsx",
+              //     icon: Icons.assignment,
+              //     color: Colors.teal,
+              //     onTap: () async {},
+              //   ),
             ],
             child: ListTile(
               onTap: () {

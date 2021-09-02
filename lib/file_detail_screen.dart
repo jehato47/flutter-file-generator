@@ -17,8 +17,8 @@ class _FileDetailScreenState extends State<FileDetailScreen> {
     bool havePdf = args["pdf"];
     print(haveXlsx);
     print(havePdf);
-    bool pdfon = havePdf;
-    bool xlsxon = haveXlsx;
+    // bool pdfon = havePdf;
+    // bool xlsxon = haveXlsx;
     // print(args.data());
     // print(args.length);
     List xlsx = [];
