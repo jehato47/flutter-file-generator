@@ -24,7 +24,12 @@ class _XlsxFormState extends State<XlsxForm> {
         key: _formKey,
         child: ListView(
           children: [
-            Text("Excel File Info"),
+            Text(
+              "Excel Dosyası Bilgileri",
+              style: TextStyle(fontSize: 20),
+            ),
+            Divider(),
+            SizedBox(height: 10),
             TextFormField(
               validator: (value) {
                 print(value);
@@ -36,8 +41,9 @@ class _XlsxFormState extends State<XlsxForm> {
               onSaved: (newValue) {
                 formData["carBrand"] = newValue;
               },
-              decoration: InputDecoration(labelText: "car brand"),
+              decoration: InputDecoration(labelText: "Araç Marka"),
             ),
+            SizedBox(height: 10),
             TextFormField(
               validator: (value) {
                 if (value == "") return "Modeli Girin";
@@ -48,8 +54,9 @@ class _XlsxFormState extends State<XlsxForm> {
               onSaved: (newValue) {
                 formData["carModel"] = newValue;
               },
-              decoration: InputDecoration(labelText: "car model"),
+              decoration: InputDecoration(labelText: "Araç Model"),
             ),
+            SizedBox(height: 10),
             TextFormField(
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.number,
@@ -64,8 +71,9 @@ class _XlsxFormState extends State<XlsxForm> {
 
                 return null;
               },
-              decoration: InputDecoration(labelText: "car year"),
+              decoration: InputDecoration(labelText: "Araç Yıl"),
             ),
+            SizedBox(height: 10),
             TextFormField(
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
@@ -91,8 +99,9 @@ class _XlsxFormState extends State<XlsxForm> {
               onSaved: (newValue) {
                 formData["old"] = newValue;
               },
-              decoration: InputDecoration(labelText: "old"),
+              decoration: InputDecoration(labelText: "Yaş"),
             ),
+            SizedBox(height: 10),
             TextFormField(
               validator: (value) {
                 if (value == "") return "Ülkeyi Girin";
@@ -103,8 +112,9 @@ class _XlsxFormState extends State<XlsxForm> {
               onSaved: (newValue) {
                 formData["country"] = newValue;
               },
-              decoration: InputDecoration(labelText: "country"),
+              decoration: InputDecoration(labelText: "Ülke"),
             ),
+            SizedBox(height: 10),
             TextFormField(
               validator: (value) {
                 if (value == "") return "Vin Numarasını Girin";
@@ -115,7 +125,7 @@ class _XlsxFormState extends State<XlsxForm> {
               onSaved: (newValue) {
                 formData["vinNumber"] = newValue;
               },
-              decoration: InputDecoration(labelText: "vin number"),
+              decoration: InputDecoration(labelText: "Vin Numarası"),
             ),
             SizedBox(height: 10),
             isLoading
@@ -191,7 +201,7 @@ class _XlsxFormState extends State<XlsxForm> {
                         });
                       }
                     },
-                    child: Text("btn"),
+                    child: Text("Oluştur"),
                   )
           ],
         ),

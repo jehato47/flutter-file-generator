@@ -1,3 +1,6 @@
+import 'package:school_responsive/exporter_sgs_fields.dart';
+import 'package:school_responsive/importer_sgs_fields.dart';
+import 'package:school_responsive/pdf_screen.dart';
 import 'package:school_responsive/provider/sgs_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 class SgsForm extends StatefulWidget {
   @override
@@ -19,6 +23,16 @@ class SgsForm extends StatefulWidget {
 }
 
 class _SgsFormState extends State<SgsForm> {
+  String currentText = "";
+  TextEditingController exporterNameController = new TextEditingController();
+  TextEditingController exporterAddressController = new TextEditingController();
+  TextEditingController importerNameController = new TextEditingController();
+  TextEditingController importerAddressController = new TextEditingController();
+  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<String>> key2 = new GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<String>> key3 = new GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<String>> key4 = new GlobalKey();
+
   File file;
   FilePickerResult result;
   bool isLoading = false;
@@ -32,6 +46,10 @@ class _SgsFormState extends State<SgsForm> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, String> companies = {
+      "Truckland Aps": "Højbjerg Huse 7, 8840 Rødkærsbro, Danimarka",
+      "Hoplog Oy": "Keskikankaantie 28, 15860 Hollola, Finlandiya",
+    };
     FirebaseAuth auth = FirebaseAuth.instance;
     return Padding(
       padding: EdgeInsets.all(20),
@@ -42,60 +60,92 @@ class _SgsFormState extends State<SgsForm> {
             Expanded(
               child: ListView(
                 children: [
-                  Text("Exporter"),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == "") return "Firma Ismini Girin";
-
-                      return null;
-                    },
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(labelText: "company name"),
-                    onSaved: (newValue) {
-                      formData["exporterCompany"] = newValue;
-                    },
+                  Text(
+                    "İhracatçı",
+                    style: TextStyle(fontSize: 20),
                   ),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == "") return "Adresi Girin";
-
-                      return null;
-                    },
-                    textInputAction: TextInputAction.next,
-                    onSaved: (newValue) {
-                      formData["exporterAddress"] = newValue;
-                    },
-                    decoration: InputDecoration(labelText: "company address"),
+                  Divider(),
+                  // SizedBox(height: 10),
+                  ExporterSgsFields(
+                    exporterNameController,
+                    exporterAddressController,
+                    companies,
+                    key,
+                    key2,
                   ),
-                  SizedBox(height: 20),
-                  Text("Importer"),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == "") return "Firma Ismini Girin";
+                  // TextFormField(
+                  //   validator: (value) {
+                  //     if (value == "") return "Firma Ismini Girin";
 
-                      return null;
-                    },
-                    textInputAction: TextInputAction.next,
-                    onSaved: (newValue) {
-                      formData["importerCompany"] = newValue;
-                    },
-                    decoration: InputDecoration(labelText: "company name"),
-                  ),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == "") return "Adresi Girin";
+                  //     return null;
+                  //   },
+                  //   textInputAction: TextInputAction.next,
+                  //   decoration: InputDecoration(labelText: "Firma İsmi"),
+                  //   onSaved: (newValue) {
+                  //     formData["exporterCompany"] = newValue;
+                  //   },
+                  // ),
+                  // SizedBox(height: 10),
+                  // TextFormField(
+                  //   validator: (value) {
+                  //     if (value == "") return "Adresi Girin";
 
-                      return null;
-                    },
-                    textInputAction: TextInputAction.next,
-                    onSaved: (newValue) {
-                      formData["importerAddress"] = newValue;
-                    },
-                    decoration: InputDecoration(labelText: "company address"),
+                  //     return null;
+                  //   },
+                  //   textInputAction: TextInputAction.next,
+                  //   onSaved: (newValue) {
+                  //     formData["exporterAddress"] = newValue;
+                  //   },
+                  //   decoration: InputDecoration(labelText: "Firma Adresi"),
+                  // ),
+                  // SizedBox(height: 20),
+                  Text(
+                    "İthalatçı",
+                    style: TextStyle(fontSize: 20),
                   ),
+                  Divider(),
+                  ImporterSgsFields(
+                    importerNameController,
+                    importerAddressController,
+                    companies,
+                    key3,
+                    key4,
+                  ),
+                  // SizedBox(height: 10),
+                  // TextFormField(
+                  //   validator: (value) {
+                  //     if (value == "") return "Firma İsmini Girin";
+
+                  //     return null;
+                  //   },
+                  //   textInputAction: TextInputAction.next,
+                  //   onSaved: (newValue) {
+                  //     formData["importerCompany"] = newValue;
+                  //   },
+                  //   decoration: InputDecoration(labelText: "Firma İsmi"),
+                  // ),
+                  // SizedBox(height: 10),
+                  // TextFormField(
+                  //   validator: (value) {
+                  //     if (value == "") return "Adresi Girin";
+
+                  //     return null;
+                  //   },
+                  //   textInputAction: TextInputAction.next,
+                  //   onSaved: (newValue) {
+                  //     formData["importerAddress"] = newValue;
+                  //   },
+                  //   decoration: InputDecoration(labelText: "Firma Adresi"),
+                  // ),
+                  // Text(
+                  //   "Fatura",
+                  //   style: TextStyle(fontSize: 20),
+                  // ),
+                  // Divider(),
+                  // SizedBox(height: 10),
                   TextFormField(
                     validator: (value) {
-                      if (value == "") return "Invoice No ve Date Girin";
+                      if (value == "") return "Fatura No ve Tarihi Girin";
 
                       return null;
                     },
@@ -103,11 +153,12 @@ class _SgsFormState extends State<SgsForm> {
                     onSaved: (newValue) {
                       formData["invoiceNoDate"] = newValue;
                     },
-                    decoration: InputDecoration(labelText: "invoiceNoDate"),
+                    decoration: InputDecoration(labelText: "Fatura No / Tarih"),
                   ),
+                  SizedBox(height: 10),
                   TextFormField(
                     validator: (value) {
-                      if (value == "") return "Vın Numarasını Girin";
+                      if (value == "") return "Vin Numarasını Girin";
 
                       return null;
                     },
@@ -115,9 +166,27 @@ class _SgsFormState extends State<SgsForm> {
                     onSaved: (newValue) {
                       formData["vinNumber"] = newValue;
                     },
-                    decoration: InputDecoration(labelText: "vin number"),
+                    decoration: InputDecoration(labelText: "Vin Numarası"),
                   ),
-                  SizedBox(height: 20),
+                  TextButton(
+                    child: Text(file != null
+                        ? file.path.split("/").last
+                        : "Faturayı Yükle"),
+                    onPressed: () async {
+                      result = await FilePicker.platform.pickFiles(
+                        type: FileType.image,
+                      );
+
+                      if (!kIsWeb && result != null) {
+                        setState(() {
+                          file = File(result.files.single.path);
+                        });
+                      } else {
+                        // User canceled the picker
+                      }
+                    },
+                  ),
+                  // SizedBox(height: 20),
                   isLoading
                       ? Center(child: CircularProgressIndicator())
                       : ElevatedButton(
@@ -132,6 +201,18 @@ class _SgsFormState extends State<SgsForm> {
                               );
                             if (!isValid) return;
                             _formKey.currentState.save();
+
+                            formData["exporterAddress"] =
+                                exporterNameController.text.trim();
+                            formData["exporterCompany"] =
+                                exporterAddressController.text.trim();
+
+                            formData["importerAddress"] =
+                                importerNameController.text.trim();
+                            formData["importerCompany"] =
+                                importerAddressController.text.trim();
+
+                            // return;
                             setState(() {
                               isLoading = true;
                             });
@@ -150,7 +231,7 @@ class _SgsFormState extends State<SgsForm> {
                               }
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text("Oluşturuldu indirme başlıyor"),
+                                  content: Text("Oluşturuldu"),
                                   backgroundColor: Colors.green,
                                 ),
                               );
@@ -210,21 +291,12 @@ class _SgsFormState extends State<SgsForm> {
                                 'uid': auth.currentUser.uid,
                               });
                             }
+
+                            await launch(url);
+                            return;
                           },
                           child: Text("kaydet"),
                         ),
-                  TextButton(
-                    child: Text("Pick File"),
-                    onPressed: () async {
-                      result = await FilePicker.platform.pickFiles();
-
-                      if (!kIsWeb && result != null) {
-                        file = File(result.files.single.path);
-                      } else {
-                        // User canceled the picker
-                      }
-                    },
-                  )
                 ],
               ),
             ),

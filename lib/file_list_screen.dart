@@ -5,7 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:school_responsive/file_detail_screen.dart';
+import 'package:school_responsive/file_item.dart';
+import 'package:school_responsive/manage_form.dart';
+import 'package:school_responsive/pdf_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'provider/core_provider.dart';
+import 'package:intl/intl.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class FileListScreen extends StatefulWidget {
   @override
@@ -16,6 +23,8 @@ class _FileListScreenState extends State<FileListScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
+    // Intl.defaultLocale = 'tr';
+
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection("files")
@@ -28,6 +37,7 @@ class _FileListScreenState extends State<FileListScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return Center(child: CircularProgressIndicator());
+        if (snapshot.data == null) return Container();
 
         final data = snapshot.data.docs;
         if (data.length == 0) {
@@ -41,95 +51,9 @@ class _FileListScreenState extends State<FileListScreen> {
 
         return ListView.builder(
           itemCount: data.length,
-          itemBuilder: (context, index) => Slidable(
-            actions: [
-              if (data[index].data().containsKey("pdfUrl"))
-                IconSlideAction(
-                  caption: "pdf",
-                  icon: Icons.assignment,
-                  color: Colors.red,
-                  onTap: () async {
-                    await Provider.of<Core>(context, listen: false)
-                        .getPdfUrl(data[index]["vinNumber"]);
-                  },
-                ),
-              if (data[index].data().containsKey("url"))
-                IconSlideAction(
-                  caption: "xlsx",
-                  icon: Icons.assignment,
-                  color: Colors.green,
-                  onTap: () async {
-                    await Provider.of<Core>(context, listen: false)
-                        .getXlsxUrl(data[index]["vinNumber"]);
-                  },
-                ),
-            ],
-            secondaryActions: [
-              // if (data[index].data().containsKey("pdfUrl"))
-              IconSlideAction(
-                caption: "Sil",
-                icon: Icons.assignment,
-                color: Colors.amber,
-                onTap: () async {
-                  var a = 0;
-                  await showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      content: Text("Kesin mi?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            a = 1;
-                            Navigator.of(context).pop();
-                          },
-                          child: Text("evet"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            a = 0;
-                            Navigator.of(context).pop();
-                          },
-                          child: Text("hayır"),
-                        ),
-                      ],
-                    ),
-                  );
-
-                  if (a == 1) {
-                    final vin = data[index]["vinNumber"];
-                    if (data[index].data().containsKey("pdfUrl"))
-                      await FirebaseStorage.instance
-                          .ref("$vin/$vin.pdf")
-                          .delete();
-
-                    if (data[index].data().containsKey("url"))
-                      await FirebaseStorage.instance
-                          .ref("$vin/$vin.xlsx")
-                          .delete();
-
-                    await FirebaseFirestore.instance
-                        .collection("files")
-                        .doc(vin)
-                        .delete();
-                  }
-                },
-              ),
-              // if (data[index].data().containsKey("url"))
-              //   IconSlideAction(
-              //     caption: "delete xlsx",
-              //     icon: Icons.assignment,
-              //     color: Colors.teal,
-              //     onTap: () async {},
-              //   ),
-            ],
-            child: ListTile(
-              onTap: () {
-                Navigator.of(context)
-                    .pushNamed(FileDetailScreen.url, arguments: data[index]);
-              },
-              title: Text(data[index]["vinNumber"]),
-            ),
-            actionPane: SlidableDrawerActionPane(),
+          itemBuilder: (context, index) => FileItem(
+            item: data[index],
+            number: data.length - index,
           ),
         );
       },

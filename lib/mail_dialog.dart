@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -103,11 +104,11 @@ class _MailDialogState extends State<MailDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              keyboardType: TextInputType.emailAddress,
-              controller: _controller,
-              decoration: InputDecoration(hintText: "email"),
-            ),
+            // TextField(
+            //   keyboardType: TextInputType.emailAddress,
+            //   controller: _controller,
+            //   decoration: InputDecoration(hintText: "email"),
+            // ),
             CheckboxListTile(
               secondary: Icon(
                 Icons.assignment,
@@ -136,9 +137,9 @@ class _MailDialogState extends State<MailDialog> {
             ),
             ElevatedButton(
                 onPressed: () async {
-                  if (_controller.text.isEmpty) return;
-                  if (!_controller.text.contains("@")) return;
-                  if (!_controller.text.contains(".com")) return;
+                  // if (_controller.text.isEmpty) return;
+                  // if (!_controller.text.contains("@")) return;
+                  // if (!_controller.text.contains(".com")) return;
                   // if (xlsxon && pdfon) {
                   //   print("both");
                   //   return;
@@ -157,7 +158,7 @@ class _MailDialogState extends State<MailDialog> {
                   selectMessage();
                   print(msg);
                   await FirebaseFirestore.instance.collection("mail").add({
-                    "to": [_controller.text.trim()],
+                    "to": [FirebaseAuth.instance.currentUser.email],
                     "message": {
                       "subject": 'SGS REGISTRATION',
                       "text": 'Selam',
@@ -167,8 +168,15 @@ class _MailDialogState extends State<MailDialog> {
 
                   print("sent");
                   Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Başarıyla Gönderildi"),
+                      duration: Duration(milliseconds: 1000),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
                 },
-                child: Text("gönder"))
+                child: Text("Mailime gönder"))
           ],
         ),
       ),

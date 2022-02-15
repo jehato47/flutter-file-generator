@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:school_responsive/login_screen.dart';
 import 'sgs_form.dart';
 import 'xlsx_form.dart';
@@ -23,12 +24,20 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
     FirebaseAuth auth = FirebaseAuth.instance;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sgs Generator"),
+        title: Text("Sgs Düzenleyici"),
         actions: [
+          auth.currentUser.photoURL != null
+              ? CircleAvatar(
+                  backgroundImage: NetworkImage(auth.currentUser.photoURL),
+                )
+              : Container(),
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
+              final isSignedIn = await GoogleSignIn().isSignedIn();
+              if (isSignedIn) await GoogleSignIn().signOut();
+
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) => LoginScreen(),
               ));

@@ -46,13 +46,13 @@ class Core extends ChangeNotifier {
         firebase_storage.FirebaseStorage.instance;
 
     final response = await storage.ref("$vinN/$vinN.pdf").getDownloadURL();
-    print(response);
-    // return;
-    void _launchURL(_url) async => await canLaunch(_url)
-        ? await launch(_url)
-        : throw 'Could not launch $_url';
+    // print(response);
+    // // return;
+    // void _launchURL(_url) async => await canLaunch(_url)
+    //     ? await launch(_url)
+    //     : throw 'Could not launch $_url';
 
-    _launchURL(response);
+    // _launchURL(response);
     return response;
   }
 }

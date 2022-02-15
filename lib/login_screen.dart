@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:school_responsive/bottom_navbar.dart';
 import 'package:school_responsive/file_list_screen.dart';
 import 'package:school_responsive/firebase.dart';
@@ -7,6 +9,7 @@ import 'package:school_responsive/firebase.dart';
 import 'provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 const users = const {
   'dribbble@gmail.com': '12345',
@@ -55,7 +58,46 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      theme: LoginTheme(textFieldStyle: TextStyle(color: Colors.white)),
+      loginProviders: [
+        LoginProvider(
+          callback: () async {
+            // GoogleSignInAccount signInAccount = await GoogleSignIn().signIn();
+
+            try {
+              GoogleSignInAccount account = await GoogleSignIn().signIn();
+              if (account != null) {
+                GoogleSignInAuthentication inAuthentication =
+                    await account.authentication;
+                UserCredential credential =
+                    await FirebaseAuth.instance.signInWithCredential(
+                  GoogleAuthProvider.credential(
+                    idToken: inAuthentication.idToken,
+                    accessToken: inAuthentication.accessToken,
+                  ),
+                );
+                print(account.email);
+                print(credential.user);
+                print(account.photoUrl);
+              } else {
+                return "Giriş Yapmadınız";
+              }
+              return null;
+            } catch (error) {
+              print(error);
+              return error.toString();
+            }
+          },
+          icon: FontAwesomeIcons.google,
+        )
+      ],
+      theme: LoginTheme(
+        textFieldStyle:
+            TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+        buttonTheme: LoginButtonTheme(
+            // backgroundColor: Colors.red,
+            ),
+      ),
+
       messages: LoginMessages(
         usernameHint: "Kullanıcı Adı",
         passwordHint: "Şifre",
@@ -63,7 +105,8 @@ class LoginScreen extends StatelessWidget {
         loginButton: "Giriş Yap",
         signupButton: "Kayıt Ol",
       ),
-      title: 'Sgs Generator',
+      title: 'Sgs Düzenleyici',
+
       // logo: 'assets/images/ecorp-lightblue.png',
       hideForgotPasswordButton: true,
       onLogin: (LoginData data) async {
@@ -80,6 +123,39 @@ class LoginScreen extends StatelessWidget {
         ));
       },
       onRecoverPassword: _recoverPassword,
+    );
+  }
+
+  Future<ElevatedButton> googleLoginButton() async {
+    return ElevatedButton(
+      onPressed: () async {
+        // GoogleSignInAccount signInAccount = await GoogleSignIn().signIn();
+
+        try {
+          GoogleSignInAccount account = await GoogleSignIn(
+            scopes: [
+              'email',
+              'https://www.googleapis.com/auth/contacts.readonly',
+            ],
+          ).signIn();
+          if (account != null) {
+            GoogleSignInAuthentication inAuthentication =
+                await account.authentication;
+            UserCredential credential =
+                await FirebaseAuth.instance.signInWithCredential(
+              GoogleAuthProvider.credential(
+                idToken: inAuthentication.idToken,
+                accessToken: inAuthentication.accessToken,
+              ),
+            );
+            print(account.email);
+            print(credential.user);
+          }
+        } catch (error) {
+          print(error);
+        }
+      },
+      child: Text("signin"),
     );
   }
 }

@@ -2,6 +2,8 @@ import 'dart:io';
 import 'mail_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'helpers/truncate_string.dart';
 
 class FileDetailScreen extends StatefulWidget {
   static const url = "file-detail";
@@ -33,39 +35,43 @@ class _FileDetailScreenState extends State<FileDetailScreen> {
         Divider(),
 
         ListTile(
-            trailing: Text(args["contactPerson"]), title: Text("contact person")
+            trailing: Text(args["contactPerson"]), title: Text("Aracı Kişi")
             // style: TextStyle(fontSize: 20),
             ),
         ListTile(
-            title: Text("date"),
+            title: Text("Oluşturma Tarihi"),
             trailing: Text(
-              args["date"].toDate().toString(),
+              DateFormat().add_yMMMMd().format(args["date"].toDate()),
             )),
-        ListTile(trailing: Text(args["email"]), title: Text("email")
+        ListTile(trailing: Text(args["email"]), title: Text("Email")
             // style: TextStyle(fontSize: 20),
             ),
         ListTile(
-            trailing: Text(args["exporterAddress"]),
-            title: Text("exporterAddress")
+          title: Text("İhracatçı Adres"),
+          trailing: Text(args["exporterAddress"].toString().truncate(max: 25)),
+          // style: TextStyle(fontSize: 20),
+        ),
+        ListTile(
+            trailing:
+                Text(args["exporterCompany"].toString().truncate(max: 25)),
+            title: Text("İhracatçı Firma")
             // style: TextStyle(fontSize: 20),
             ),
         ListTile(
-            trailing: Text(args["exporterCompany"]),
-            title: Text("exporterCompany")
+            trailing:
+                Text(args["importerAddress"].toString().truncate(max: 25)),
+            title: Text("İthalatçı Adres")
             // style: TextStyle(fontSize: 20),
             ),
         ListTile(
-            trailing: Text(args["importerAddress"]),
-            title: Text("importerAddress")
+            trailing:
+                Text(args["importerCompany"].toString().truncate(max: 20)),
+            title: Text("İthalatçı Firma")
             // style: TextStyle(fontSize: 20),
             ),
         ListTile(
-            trailing: Text(args["importerCompany"]),
-            title: Text("importerCompany")
-            // style: TextStyle(fontSize: 20),
-            ),
-        ListTile(
-            trailing: Text(args["invoiceNoDate"]), title: Text("invoiceNoDate")
+            trailing: Text(args["invoiceNoDate"]),
+            title: Text("Fatura No/Tarih")
             // style: TextStyle(fontSize: 20),
             ),
         // ListTile(
@@ -73,10 +79,10 @@ class _FileDetailScreenState extends State<FileDetailScreen> {
         //   // title:Text("pdfUrl")
         //   // style: TextStyle(fontSize: 20),
         // ),
-        ListTile(trailing: Text(args["phone"]), title: Text("phone")
+        ListTile(trailing: Text(args["phone"]), title: Text("Telefon")
             // style: TextStyle(fontSize: 20),
             ),
-        ListTile(trailing: Text(args["vinNumber"]), title: Text("vinNumber")
+        ListTile(trailing: Text(args["vinNumber"]), title: Text("Vin Numarası")
             // style: TextStyle(fontSize: 20),
             ),
       ];
@@ -92,27 +98,28 @@ class _FileDetailScreenState extends State<FileDetailScreen> {
         Divider(),
         ListTile(
           trailing: Text(args["carBrand"]),
-          title: Text("carBrand"),
+          title: Text("Araç Marka"),
         ),
         ListTile(
           trailing: Text(args["carModel"]),
-          title: Text("carModel"),
+          title: Text("Araç Model"),
         ),
         ListTile(
           trailing: Text(args["carYear"]),
-          title: Text("carYear"),
+          title: Text("Araç Yıl"),
         ),
         ListTile(
           trailing: Text(args["country"]),
-          title: Text("country"),
+          title: Text("Ülke"),
         ),
         ListTile(
-          trailing: Text(args["date"].toDate().toString()),
-          title: Text("date"),
+          trailing:
+              Text(DateFormat().add_yMMMMd().format(args["date"].toDate())),
+          title: Text("Tarih"),
         ),
         ListTile(
           trailing: Text(args["old"]),
-          title: Text("old"),
+          title: Text("Old"),
         ),
         // ListTile(
         //   trailing: Text(args["url"]),
@@ -120,7 +127,7 @@ class _FileDetailScreenState extends State<FileDetailScreen> {
         // ),
         ListTile(
           trailing: Text(args["vinNumber"]),
-          title: Text("vinNumber"),
+          title: Text("Vin Numarası"),
         ),
       ];
     }
