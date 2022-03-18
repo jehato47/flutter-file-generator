@@ -1,21 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:school_responsive/firebase.dart';
-import 'package:school_responsive/manage_form.dart';
-import 'package:school_responsive/provider/auth_provider.dart';
-import 'package:school_responsive/provider/sgs_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/material.dart';
 // import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'sgs_form.dart';
-import 'provider/core_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'bottom_navbar.dart';
-import 'login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'file_detail_screen.dart';
-import 'dart:io';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:school_responsive/provider/sgs_provider_mobile.dart';
+import 'package:school_responsive/provider/sgs_provider_web.dart';
+
+import 'bottom_navbar.dart';
+import 'file_detail_screen.dart';
+import 'login_screen.dart';
+import 'manage_form.dart';
+import 'provider/auth_provider.dart';
+import 'provider/core_provider.dart';
+import 'provider/form_provider.dart';
+import 'provider/sgs_provider.dart';
+import 'sgs_form.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +42,16 @@ class MyApp extends StatelessWidget {
           create: (context) => Sgs(),
         ),
         ChangeNotifierProvider(
+          create: (context) => SgsProviderMobile(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SgsProviderWeb(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => Auth(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FormProvider(),
         ),
       ],
       child: MaterialApp(
@@ -66,7 +77,7 @@ class MyApp extends StatelessWidget {
         ],
         // ignore: always_specify_types
         // supportedLocales:
-        //
+
         locale: const Locale('tr'),
         routes: {
           FileDetailScreen.url: (context) => FileDetailScreen(),
@@ -90,6 +101,7 @@ class MyApp extends StatelessWidget {
                 return LoginScreen();
               else
                 return BottomNavbarScreen();
+
               // return StreamBuilder(
               //   // TODO: login, logout, signup yapıldıgında bu stream değişecek
               //   // TODO: onAuthstateChanged -> authStateChanges

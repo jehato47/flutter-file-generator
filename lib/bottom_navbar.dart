@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:school_responsive/dropdownbutton.dart';
 import 'package:school_responsive/login_screen.dart';
 import 'sgs_form.dart';
 import 'xlsx_form.dart';
 import 'file_list_screen.dart';
+import 'helpers/string_helpers.dart';
 
 class BottomNavbarScreen extends StatefulWidget {
   @override
@@ -26,11 +28,15 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
       appBar: AppBar(
         title: Text("Sgs Düzenleyici"),
         actions: [
-          auth.currentUser.photoURL != null
-              ? CircleAvatar(
-                  backgroundImage: NetworkImage(auth.currentUser.photoURL),
-                )
-              : Container(),
+          // DropDownButton(),
+          // auth.currentUser.photoURL != null
+          //     ? CircleAvatar(
+          //         backgroundImage: NetworkImage(auth.currentUser.photoURL),
+          //       )
+          //     // ? CircleAvatar(
+          //     //     child: Text(auth.currentUser?.displayName?.shortenName()),
+          //     //   )
+          //     : Container(),
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () async {

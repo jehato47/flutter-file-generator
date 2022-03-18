@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:school_responsive/provider/core_provider.dart';
 import 'package:school_responsive/xlsx_form.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'helpers/truncate_string.dart';
+import 'helpers/string_helpers.dart';
 import 'package:intl/intl.dart';
 import 'mail_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
