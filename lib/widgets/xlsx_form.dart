@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'provider/core_provider.dart';
+import '../provider/core_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -66,7 +66,7 @@ class _XlsxFormState extends State<XlsxForm> {
               validator: (value) {
                 dynamic v;
 
-                v = int.tryParse(value);
+                v = int.tryParse((value as String));
                 if (v == null) return "Sayı Girin";
 
                 return null;
@@ -91,7 +91,7 @@ class _XlsxFormState extends State<XlsxForm> {
               validator: (value) {
                 dynamic v;
 
-                v = int.tryParse(value);
+                v = int.tryParse((value as String));
                 if (v == null) return "Sayı Girin";
 
                 return null;
@@ -134,7 +134,7 @@ class _XlsxFormState extends State<XlsxForm> {
                   )
                 : ElevatedButton(
                     onPressed: () async {
-                      bool isValid = _formKey.currentState.validate();
+                      bool isValid = _formKey.currentState!.validate();
                       print(isValid);
                       if (!isValid) return;
 
@@ -142,7 +142,7 @@ class _XlsxFormState extends State<XlsxForm> {
                       setState(() {
                         isLoading = true;
                       });
-                      _formKey.currentState.save();
+                      _formKey.currentState!.save();
                       print(formData);
 
                       await Provider.of<Core>(context, listen: false)
@@ -180,7 +180,7 @@ class _XlsxFormState extends State<XlsxForm> {
                           'country': formData['country'],
                           'vinNumber': formData['vinNumber'],
                           'url': url,
-                          'uid': auth.currentUser.uid,
+                          'uid': auth.currentUser?.uid,
                         });
                       else {
                         await FirebaseFirestore.instance
@@ -197,7 +197,7 @@ class _XlsxFormState extends State<XlsxForm> {
                           'country': formData['country'],
                           'vinNumber': formData['vinNumber'],
                           'url': url,
-                          'uid': auth.currentUser.uid,
+                          'uid': auth.currentUser?.uid,
                         });
                       }
                     },

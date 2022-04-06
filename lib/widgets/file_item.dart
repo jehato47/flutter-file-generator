@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'file_detail_screen.dart';
 import 'pdf_screen.dart';
-import 'provider/core_provider.dart';
+import '../provider/core_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'manage_form.dart';
@@ -15,7 +15,8 @@ import 'manage_form.dart';
 class FileItem extends StatelessWidget {
   final dynamic item;
   final int number;
-  const FileItem({Key key, this.item, this.number}) : super(key: key);
+  const FileItem({Key? key, required this.item, required this.number})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

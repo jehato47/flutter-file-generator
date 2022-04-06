@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -5,7 +7,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class Sgs extends ChangeNotifier {
-  Future<void> sendFormm(dynamic formData, FilePickerResult result) async {
+  Future<void> sendFormm(dynamic formData, FilePickerResult? result) async {
     var dio = Dio();
     dio.options.baseUrl = 'https://jehat22.pythonanywhere.com/';
     var _formData;
@@ -21,8 +23,8 @@ class Sgs extends ChangeNotifier {
       'invoiceNoDate': formData["invoiceNoDate"],
       'vinNumber': formData["vinNumber"],
       'invoice': MultipartFile.fromBytes(
-        result.files.single.bytes,
-        filename: result.files.single.name,
+        (result?.files.single.bytes as Uint8List),
+        filename: result?.files.single.name,
       ),
     });
 

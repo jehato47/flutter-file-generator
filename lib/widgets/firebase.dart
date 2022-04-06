@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
+// import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
@@ -48,7 +49,8 @@ class _FirebaseScreenState extends State<FirebaseScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
-                List<QueryDocumentSnapshot> docs = snapshot.data.docs;
+                List<QueryDocumentSnapshot> docs =
+                    (snapshot.data as QuerySnapshot).docs;
                 List<String> suggestions = docs
                     .map((e) {
                       companies[e["exporterCompany"]] = e["exporterAddress"];
@@ -82,7 +84,7 @@ class _FirebaseScreenState extends State<FirebaseScreen> {
                         textSubmitted: (data) {
                           setState(() {
                             _controller.text = data;
-                            _controller2.text = companies[data];
+                            _controller2.text = companies[data] as String;
                           });
                         },
                         suggestions: suggestions,

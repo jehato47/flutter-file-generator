@@ -1,17 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:school_responsive/provider/core_provider.dart';
-import 'package:school_responsive/xlsx_form.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'helpers/truncate_string.dart';
-import 'package:intl/intl.dart';
+
+import '../provider/core_provider.dart';
+import 'xlsx_form.dart';
+import '../helpers/truncate_string.dart';
 import 'mail_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ManageForm extends StatefulWidget {
   static const url = "manage-form";
-  const ManageForm({Key key}) : super(key: key);
+  const ManageForm({Key? key}) : super(key: key);
 
   @override
   _ManageFormState createState() => _ManageFormState();
@@ -29,7 +28,7 @@ class _ManageFormState extends State<ManageForm> {
     final auth = FirebaseAuth.instance;
     final xlsxProv = Provider.of<Core>(context, listen: false);
 
-    var args = ModalRoute.of(context).settings.arguments as dynamic;
+    var args = ModalRoute.of(context)?.settings.arguments as dynamic;
     bool haveXlsx = args["xlsx"];
     bool havePdf = args["pdf"];
     print(haveXlsx);
@@ -38,8 +37,12 @@ class _ManageFormState extends State<ManageForm> {
     // bool xlsxon = haveXlsx;
     // print(args.data());
     // print(args.length);
-    Form xlsxForm;
-    Form pdfForm;
+    Form xlsxForm = Form(
+      child: Text(""),
+    );
+    Form pdfForm = Form(
+      child: Text(""),
+    );
 
     List xlsx = [];
     List pdf = [];
@@ -72,7 +75,7 @@ class _ManageFormState extends State<ManageForm> {
           width: double.infinity,
           child: ElevatedButton(
               onPressed: () {
-                _formKey.currentState.save();
+                _formKey.currentState?.save();
                 print(formData);
               },
               child: Text("Sgs Güncelle")),
@@ -117,7 +120,7 @@ class _ManageFormState extends State<ManageForm> {
               : ElevatedButton(
                   onPressed: () async {
                     ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                    _formKey2.currentState.save();
+                    _formKey2.currentState?.save();
 
                     print(formData["vinNumber"]);
 
@@ -152,7 +155,7 @@ class _ManageFormState extends State<ManageForm> {
                         'country': formData['country'],
                         'vinNumber': formData['vinNumber'],
                         'url': url,
-                        'uid': auth.currentUser.uid,
+                        'uid': auth.currentUser?.uid,
                       });
                     else {
                       await FirebaseFirestore.instance
@@ -169,7 +172,7 @@ class _ManageFormState extends State<ManageForm> {
                         'country': formData['country'],
                         'vinNumber': formData['vinNumber'],
                         'url': url,
-                        'uid': auth.currentUser.uid,
+                        'uid': auth.currentUser?.uid,
                       });
                     }
                     ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -240,7 +243,7 @@ class _ManageFormState extends State<ManageForm> {
         Expanded(
           child: TextFormField(
             onSaved: (newValue) {
-              formData[variableName] = newValue.trim();
+              formData[variableName] = newValue?.trim();
             },
             initialValue: args[variableName],
           ),

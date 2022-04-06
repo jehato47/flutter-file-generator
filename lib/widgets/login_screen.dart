@@ -1,15 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:school_responsive/bottom_navbar.dart';
-import 'package:school_responsive/file_list_screen.dart';
-import 'package:school_responsive/firebase.dart';
-// import 'dashboard_screen.dart';
-import 'provider/auth_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
+
+// import 'dashboard_screen.dart';
+import '../provider/auth_provider.dart' as auth;
+import 'bottom_navbar.dart';
 
 const users = const {
   'dribbble@gmail.com': '12345',
@@ -20,14 +18,14 @@ class LoginScreen extends StatelessWidget {
   Duration get loginTime => Duration(milliseconds: 2250);
   Future<dynamic> login(BuildContext context, LoginData data) async {
     // return null;
-    final result = await Provider.of<Auth>(context, listen: false)
+    final result = await Provider.of<auth.Auth>(context, listen: false)
         .signIn(data.name, data.password);
     return result;
   }
 
-  Future<dynamic> signUp(BuildContext context, LoginData data) async {
+  Future<dynamic> signUp(BuildContext context, SignupData data) async {
     // return null;
-    final result = await Provider.of<Auth>(context, listen: false)
+    final result = await Provider.of<auth.Auth>(context, listen: false)
         .singUp(data.name, data.password);
     return result;
   }
@@ -45,7 +43,7 @@ class LoginScreen extends StatelessWidget {
   //   });
   // }
 
-  Future<String> _recoverPassword(String name) {
+  Future<String?> _recoverPassword(String name) {
     print('Name: $name');
     return Future.delayed(loginTime).then((_) {
       if (!users.containsKey(name)) {
@@ -64,7 +62,7 @@ class LoginScreen extends StatelessWidget {
             // GoogleSignInAccount signInAccount = await GoogleSignIn().signIn();
 
             try {
-              GoogleSignInAccount account = await GoogleSignIn().signIn();
+              GoogleSignInAccount? account = await GoogleSignIn().signIn();
               if (account != null) {
                 GoogleSignInAuthentication inAuthentication =
                     await account.authentication;
@@ -92,14 +90,15 @@ class LoginScreen extends StatelessWidget {
       ],
       theme: LoginTheme(
         textFieldStyle:
-            TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+            TextStyle(color: Theme.of(context).textTheme.bodyText1?.color),
         buttonTheme: LoginButtonTheme(
             // backgroundColor: Colors.red,
             ),
       ),
 
       messages: LoginMessages(
-        usernameHint: "Kullanıcı Adı",
+        providersTitleFirst: "veya şununla giriş yap",
+        userHint: "Kullanıcı Adı",
         passwordHint: "Şifre",
         flushbarTitleError: "Hata",
         loginButton: "Giriş Yap",
@@ -113,7 +112,7 @@ class LoginScreen extends StatelessWidget {
         final response = await login(context, data);
         return response;
       },
-      onSignup: (LoginData data) async {
+      onSignup: (SignupData data) async {
         final response = await signUp(context, data);
         return response;
       },
@@ -132,7 +131,7 @@ class LoginScreen extends StatelessWidget {
         // GoogleSignInAccount signInAccount = await GoogleSignIn().signIn();
 
         try {
-          GoogleSignInAccount account = await GoogleSignIn(
+          GoogleSignInAccount? account = await GoogleSignIn(
             scopes: [
               'email',
               'https://www.googleapis.com/auth/contacts.readonly',

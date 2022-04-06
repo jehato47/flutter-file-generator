@@ -11,7 +11,7 @@ class MailDialog extends StatefulWidget {
 }
 
 class _MailDialogState extends State<MailDialog> {
-  String msg;
+  String? msg;
   void selectMessage() {
     bool haveXlsx = args["xlsx"];
     bool havePdf = args["pdf"];
@@ -158,7 +158,7 @@ class _MailDialogState extends State<MailDialog> {
                   selectMessage();
                   print(msg);
                   await FirebaseFirestore.instance.collection("mail").add({
-                    "to": [FirebaseAuth.instance.currentUser.email],
+                    "to": [FirebaseAuth.instance.currentUser?.email],
                     "message": {
                       "subject": 'SGS REGISTRATION',
                       "text": 'Selam',

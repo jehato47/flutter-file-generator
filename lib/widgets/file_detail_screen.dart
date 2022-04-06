@@ -3,7 +3,7 @@ import 'mail_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'helpers/truncate_string.dart';
+import '../helpers/truncate_string.dart';
 
 class FileDetailScreen extends StatefulWidget {
   static const url = "file-detail";
@@ -14,7 +14,7 @@ class FileDetailScreen extends StatefulWidget {
 class _FileDetailScreenState extends State<FileDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context).settings.arguments as dynamic;
+    var args = ModalRoute.of(context)?.settings.arguments as dynamic;
     bool haveXlsx = args["xlsx"];
     bool havePdf = args["pdf"];
     print(haveXlsx);

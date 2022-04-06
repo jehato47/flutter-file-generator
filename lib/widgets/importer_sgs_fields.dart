@@ -1,15 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
+// import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:flutter/material.dart';
 
-class ExporterSgsFields extends StatefulWidget {
+class ImporterSgsFields extends StatefulWidget {
   final TextEditingController controller;
   final TextEditingController controller2;
   final dynamic companies;
   final dynamic key1;
   final dynamic key2;
 
-  const ExporterSgsFields(
+  const ImporterSgsFields(
     this.controller,
     this.controller2,
     this.companies,
@@ -18,10 +19,10 @@ class ExporterSgsFields extends StatefulWidget {
   );
 
   @override
-  _ExporterSgsFieldsState createState() => _ExporterSgsFieldsState();
+  _ImporterSgsFieldsState createState() => _ImporterSgsFieldsState();
 }
 
-class _ExporterSgsFieldsState extends State<ExporterSgsFields> {
+class _ImporterSgsFieldsState extends State<ImporterSgsFields> {
   @override
   Widget build(BuildContext context) {
     dynamic _controller = widget.controller;
@@ -29,17 +30,19 @@ class _ExporterSgsFieldsState extends State<ExporterSgsFields> {
     dynamic companies = widget.companies;
     dynamic key = widget.key1;
     dynamic key2 = widget.key2;
+
     return StreamBuilder(
         stream: FirebaseFirestore.instance.collection("files").snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
-          List<QueryDocumentSnapshot> docs = snapshot.data.docs;
+          List<QueryDocumentSnapshot> docs =
+              (snapshot.data as QuerySnapshot).docs;
           List<String> suggestions = docs
               .map((e) {
-                companies[e["exporterCompany"]] = e["exporterAddress"];
-                return e["exporterCompany"].toString();
+                companies[e["importerCompany"]] = e["importerAddress"];
+                return e["importerCompany"].toString();
               })
               .toSet()
               .toList();
@@ -49,6 +52,29 @@ class _ExporterSgsFieldsState extends State<ExporterSgsFields> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // TextField(
+              //   textInputAction: TextInputAction.next,
+
+              //   decoration: InputDecoration(
+              //     labelText: "Firma İsmi",
+              //     suffixIcon: IconButton(
+              //       icon: Icon(Icons.clear),
+              //       onPressed: () {
+              //         _controller.clear();
+              //         _controller2.clear();
+              //       },
+              //     ),
+              //   ),
+              //   key: key,
+              //   controller: _controller,
+              //   // clearOnSubmit: false,
+              //   onSubmitted: (data) {
+              //     setState(() {
+              //       _controller.text = data;
+              //       _controller2.text = companies[data];
+              //     });
+              //   },
+              // ),
               SimpleAutoCompleteTextField(
                 textInputAction: TextInputAction.next,
                 minLength: 0,

@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PdfViewScreen extends StatefulWidget {
   final String url;
-  const PdfViewScreen({Key key, this.url}) : super(key: key);
+  const PdfViewScreen({Key? key, required this.url}) : super(key: key);
 
   @override
   _PdfViewScreenState createState() => _PdfViewScreenState();

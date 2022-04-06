@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth extends ChangeNotifier {
-  Future<dynamic> singUp(String email, String password) async {
+  Future<dynamic> singUp(String? email, String? password) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
       UserCredential credential = await auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+        email: email!,
+        password: password!,
       );
       return null;
     } catch (err) {
@@ -23,7 +23,8 @@ class Auth extends ChangeNotifier {
           email: email, password: password);
       return null;
     } catch (err) {
-      return err.toString();
+      // ! Bak
+      throw err.toString();
     }
   }
 }

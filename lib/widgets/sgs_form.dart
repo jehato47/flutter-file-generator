@@ -1,21 +1,22 @@
-import 'package:school_responsive/exporter_sgs_fields.dart';
-import 'package:school_responsive/importer_sgs_fields.dart';
-import 'package:school_responsive/pdf_screen.dart';
-import 'package:school_responsive/provider/sgs_provider.dart';
+// import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'provider/core_provider.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:url_launcher/url_launcher.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'exporter_sgs_fields.dart';
+import 'importer_sgs_fields.dart';
+import 'pdf_screen.dart';
+import '../provider/sgs_provider.dart';
+import '../provider/core_provider.dart';
 
 class SgsForm extends StatefulWidget {
   @override
@@ -32,9 +33,13 @@ class _SgsFormState extends State<SgsForm> {
   GlobalKey<AutoCompleteTextFieldState<String>> key2 = new GlobalKey();
   GlobalKey<AutoCompleteTextFieldState<String>> key3 = new GlobalKey();
   GlobalKey<AutoCompleteTextFieldState<String>> key4 = new GlobalKey();
+  // GlobalKey key = new GlobalKey();
+  // GlobalKey key2 = new GlobalKey();
+  // GlobalKey key3 = new GlobalKey();
+  // GlobalKey key4 = new GlobalKey();
 
-  File file;
-  FilePickerResult result;
+  File? file;
+  FilePickerResult? result;
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
 
@@ -170,7 +175,7 @@ class _SgsFormState extends State<SgsForm> {
                   ),
                   TextButton(
                     child: Text(file != null
-                        ? file.path.split("/").last
+                        ? file!.path.split("/").last
                         : "Faturayı Yükle"),
                     onPressed: () async {
                       result = await FilePicker.platform.pickFiles(
@@ -179,7 +184,7 @@ class _SgsFormState extends State<SgsForm> {
 
                       if (!kIsWeb && result != null) {
                         setState(() {
-                          file = File(result.files.single.path);
+                          file = File((result!.files.single.path as String));
                         });
                       } else {
                         // User canceled the picker
@@ -191,7 +196,7 @@ class _SgsFormState extends State<SgsForm> {
                       ? Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                           onPressed: () async {
-                            bool isValid = _formKey.currentState.validate();
+                            bool isValid = _formKey.currentState!.validate();
                             if (result == null)
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -200,7 +205,7 @@ class _SgsFormState extends State<SgsForm> {
                                 ),
                               );
                             if (!isValid) return;
-                            _formKey.currentState.save();
+                            _formKey.currentState?.save();
 
                             formData["exporterAddress"] =
                                 exporterNameController.text.trim();
@@ -223,7 +228,7 @@ class _SgsFormState extends State<SgsForm> {
                                     .sendFormm(formData, result);
                               } else {
                                 print(13);
-                                final bytes = await file.readAsBytes();
+                                final bytes = await file!.readAsBytes();
                                 print(bytes.length);
                                 // return;
                                 await Provider.of<Sgs>(context, listen: false)
@@ -268,7 +273,7 @@ class _SgsFormState extends State<SgsForm> {
                                 'invoiceNoDate': formData["invoiceNoDate"],
                                 'vinNumber': formData["vinNumber"],
                                 'pdfUrl': url,
-                                'uid': auth.currentUser.uid,
+                                'uid': auth.currentUser?.uid,
                               });
                             else {
                               await FirebaseFirestore.instance
@@ -288,7 +293,7 @@ class _SgsFormState extends State<SgsForm> {
                                 'invoiceNoDate': formData["invoiceNoDate"],
                                 'vinNumber': formData["vinNumber"],
                                 'pdfUrl': url,
-                                'uid': auth.currentUser.uid,
+                                'uid': auth.currentUser?.uid,
                               });
                             }
 

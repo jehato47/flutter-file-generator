@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:school_responsive/login_screen.dart';
+import 'login_screen.dart';
 import 'sgs_form.dart';
 import 'xlsx_form.dart';
 import 'file_list_screen.dart';
@@ -12,6 +12,7 @@ class BottomNavbarScreen extends StatefulWidget {
 }
 
 class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
   int index = 0;
   List bodies = [
     FileListScreen(),
@@ -19,16 +20,17 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
     XlsxForm(),
   ];
 
+  String? profileImage = (FirebaseAuth.instance).currentUser?.photoURL;
+
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
     return Scaffold(
       appBar: AppBar(
         title: Text("Sgs Düzenleyici"),
         actions: [
-          auth.currentUser.photoURL != null
+          auth.currentUser?.photoURL != null
               ? CircleAvatar(
-                  backgroundImage: NetworkImage(auth.currentUser.photoURL),
+                  backgroundImage: NetworkImage(profileImage ?? ""),
                 )
               : Container(),
           IconButton(

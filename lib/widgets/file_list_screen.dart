@@ -1,18 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:provider/provider.dart';
-import 'package:school_responsive/file_detail_screen.dart';
-import 'package:school_responsive/file_item.dart';
-import 'package:school_responsive/manage_form.dart';
-import 'package:school_responsive/pdf_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'provider/core_provider.dart';
-import 'package:intl/intl.dart';
-import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb;
+
+import 'file_detail_screen.dart';
+import 'file_item.dart';
+import 'manage_form.dart';
+import 'pdf_screen.dart';
+import '../provider/core_provider.dart';
 
 class FileListScreen extends StatefulWidget {
   @override
@@ -30,7 +24,7 @@ class _FileListScreenState extends State<FileListScreen> {
           .collection("files")
           .where(
             "uid",
-            isEqualTo: auth.currentUser.uid,
+            isEqualTo: auth.currentUser?.uid,
           )
           .orderBy("date", descending: true)
           .snapshots(),
@@ -39,7 +33,7 @@ class _FileListScreenState extends State<FileListScreen> {
           return Center(child: CircularProgressIndicator());
         if (snapshot.data == null) return Container();
 
-        final data = snapshot.data.docs;
+        final data = (snapshot.data as QuerySnapshot).docs;
         if (data.length == 0) {
           return Center(
             child: Text(
