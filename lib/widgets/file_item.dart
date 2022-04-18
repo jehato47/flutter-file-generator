@@ -1,16 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'file_detail_screen.dart';
-import 'pdf_screen.dart';
 import '../provider/core_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
+import 'file_detail_screen.dart';
 import 'manage_form.dart';
+import 'pdf/pdf_screen.dart';
 
 class FileItem extends StatelessWidget {
   final dynamic item;

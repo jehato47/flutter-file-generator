@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/core_provider.dart';
-import 'xlsx_form.dart';
-import '../helpers/truncate_string.dart';
 import 'mail_dialog.dart';
 
 class ManageForm extends StatefulWidget {

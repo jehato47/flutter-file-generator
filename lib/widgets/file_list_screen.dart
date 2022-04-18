@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'file_detail_screen.dart';
 import 'file_item.dart';
 import 'manage_form.dart';
-import 'pdf_screen.dart';
+import 'pdf/pdf_screen.dart';
 import '../provider/core_provider.dart';
 
 class FileListScreen extends StatefulWidget {

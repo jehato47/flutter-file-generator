@@ -15,8 +15,8 @@ import 'dart:io';
 import 'exporter_sgs_fields.dart';
 import 'importer_sgs_fields.dart';
 import 'pdf_screen.dart';
-import '../provider/sgs_provider.dart';
-import '../provider/core_provider.dart';
+import '../../provider/sgs_provider.dart';
+import '../../provider/core_provider.dart';
 
 class SgsForm extends StatefulWidget {
   @override

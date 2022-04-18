@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'login_screen.dart';
-import 'sgs_form.dart';
-import 'xlsx_form.dart';
+import 'pdf/sgs_form.dart';
+import 'xlsx/xlsx_form.dart';
 import 'file_list_screen.dart';
 
 class BottomNavbarScreen extends StatefulWidget {
@@ -40,9 +40,9 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
               final isSignedIn = await GoogleSignIn().isSignedIn();
               if (isSignedIn) await GoogleSignIn().signOut();
 
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => LoginScreen(),
-              ));
+              // Navigator.of(context).pushReplacement(MaterialPageRoute(
+              //   builder: (context) => LoginScreen(),
+              // ));
             },
           )
         ],
