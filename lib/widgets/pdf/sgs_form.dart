@@ -208,14 +208,14 @@ class _SgsFormState extends State<SgsForm> {
                             _formKey.currentState?.save();
 
                             formData["exporterAddress"] =
-                                exporterNameController.text.trim();
-                            formData["exporterCompany"] =
                                 exporterAddressController.text.trim();
+                            formData["exporterCompany"] =
+                                exporterNameController.text.trim();
 
                             formData["importerAddress"] =
-                                importerNameController.text.trim();
-                            formData["importerCompany"] =
                                 importerAddressController.text.trim();
+                            formData["importerCompany"] =
+                                importerNameController.text.trim();
 
                             // return;
                             setState(() {

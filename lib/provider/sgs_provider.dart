@@ -22,6 +22,7 @@ class Sgs extends ChangeNotifier {
       'importerAddress': formData["importerAddress"],
       'invoiceNoDate': formData["invoiceNoDate"],
       'vinNumber': formData["vinNumber"],
+      'type': '',
       'invoice': MultipartFile.fromBytes(
         (result?.files.single.bytes as Uint8List),
         filename: result?.files.single.name,
@@ -55,6 +56,7 @@ class Sgs extends ChangeNotifier {
       'importerAddress': formData["importerAddress"],
       'invoiceNoDate': formData["invoiceNoDate"],
       'vinNumber': formData["vinNumber"],
+      'type': '',
       'invoice': MultipartFile.fromBytes(
         bytess,
         filename: "qwe.jpeg",

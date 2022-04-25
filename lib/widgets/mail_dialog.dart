@@ -156,7 +156,7 @@ class _MailDialogState extends State<MailDialog> {
                   // }
                   // if (xlsxon) print("xlsx");
                   selectMessage();
-                  print(msg);
+                  // print(msg);
                   await FirebaseFirestore.instance.collection("mail").add({
                     "to": [FirebaseAuth.instance.currentUser?.email],
                     "message": {

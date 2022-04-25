@@ -10,6 +10,10 @@ class FirebaseLoginScreen extends StatelessWidget {
       body: SignInScreen(
         providerConfigs: [
           EmailProviderConfiguration(),
+          GoogleProviderConfiguration(
+            clientId:
+                "735404252029-8gne6orh22tg26nk0l461urga4f9krtg.apps.googleusercontent.com",
+          )
           // GoogleProviderConfiguration(
           //   clientId:
           //       '73640989291-c0l6vi0v9o2hhvoqjmfrl9k6t1h8pv1e.apps.googleusercontent.com',
