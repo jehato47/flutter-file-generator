@@ -39,6 +39,8 @@ class _ImporterSgsFieldsState extends State<ImporterSgsFields> {
           }
           List<QueryDocumentSnapshot> docs =
               (snapshot.data as QuerySnapshot).docs;
+          docs = docs.where((element) => element["pdf"] == true).toList();
+
           List<String> suggestions = docs
               .map((e) {
                 companies[e["importerCompany"]] = e["importerAddress"];

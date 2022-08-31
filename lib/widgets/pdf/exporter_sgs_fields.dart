@@ -38,6 +38,7 @@ class _ExporterSgsFieldsState extends State<ExporterSgsFields> {
           }
           List<QueryDocumentSnapshot> docs =
               (snapshot.data as QuerySnapshot).docs;
+          docs = docs.where((element) => element["pdf"] == true).toList();
 
           List<String> suggestions = docs
               .map((e) {
@@ -47,8 +48,6 @@ class _ExporterSgsFieldsState extends State<ExporterSgsFields> {
               .toSet()
               .toList();
 
-          // List<String> addresses = docs.map((e)=>)
-          // List<String> suggestions = suggestionsf;
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

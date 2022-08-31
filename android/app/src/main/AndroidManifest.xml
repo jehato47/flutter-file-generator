@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.school_responsive">
+    package="com.armanc.sgs_app">
    <application
-        android:label="sgs generate"
+        android:label="Sgs Düzenleyici"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

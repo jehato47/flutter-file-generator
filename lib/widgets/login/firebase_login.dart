@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 
@@ -10,15 +11,12 @@ class FirebaseLoginScreen extends StatelessWidget {
       body: SignInScreen(
         providerConfigs: [
           EmailProviderConfiguration(),
+          // if (kIsWeb)
+
           GoogleProviderConfiguration(
             clientId:
-                "735404252029-8gne6orh22tg26nk0l461urga4f9krtg.apps.googleusercontent.com",
-          )
-          // GoogleProviderConfiguration(
-          //   clientId:
-          //       '73640989291-c0l6vi0v9o2hhvoqjmfrl9k6t1h8pv1e.apps.googleusercontent.com',
-          // ),
-          // PhoneProviderConfiguration()
+                '735404252029-h0p1hja97mb7gndh4egdr1octue33k8c.apps.googleusercontent.com',
+          ),
         ],
       ),
     );

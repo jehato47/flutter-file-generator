@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,8 @@ import 'helpers/localization.dart';
 import 'provider/auth_provider.dart';
 import 'provider/core_provider.dart';
 import 'provider/sgs_provider.dart';
-import 'widgets/bottom_navbar.dart';
 import 'widgets/file_detail_screen.dart';
-import 'widgets/login/firebase_login.dart';
+import 'widgets/home/auth_gate.dart';
 import 'widgets/manage_form.dart';
 
 Future<void> main() async {
@@ -72,17 +70,8 @@ class MyApp extends StatelessWidget {
             },
             debugShowCheckedModeBanner: false,
             title: 'SGS GENERATOR',
-            home: StreamBuilder<User?>(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData ||
-                    FirebaseAuth.instance.currentUser != null) {
-                  return BottomNavbarScreen();
-                } else {
-                  return FirebaseLoginScreen();
-                }
-              },
-            ),
+            home: AuthGate(),
+            // home: AuthGate(),
           );
         },
       ),

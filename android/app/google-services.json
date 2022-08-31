@@ -6,24 +6,15 @@
     },
     "client": [{
         "client_info": {
-            "mobilesdk_app_id": "1:735404252029:android:f27f570eba8c13837d8a14",
+            "mobilesdk_app_id": "1:735404252029:android:db863bda4fd481037d8a14",
             "android_client_info": {
-                "package_name": "com.example.school_responsive"
+                "package_name": "com.armanc.sgs_app"
             }
         },
         "oauth_client": [{
-                "client_id": "735404252029-747nuh8cej40oe6ekm8rc8lc485bd3un.apps.googleusercontent.com",
-                "client_type": 1,
-                "android_info": {
-                    "package_name": "com.example.school_responsive",
-                    "certificate_hash": "6deb3163332b956a7a0dec694ef404de499e1a13"
-                }
-            },
-            {
-                "client_id": "735404252029-8gne6orh22tg26nk0l461urga4f9krtg.apps.googleusercontent.com",
-                "client_type": 3
-            }
-        ],
+            "client_id": "735404252029-8gne6orh22tg26nk0l461urga4f9krtg.apps.googleusercontent.com",
+            "client_type": 3
+        }],
         "api_key": [{
             "current_key": "AIzaSyChCfdx6rR7SqG_6Izkadv_pyVLVjrwHww"
         }],

@@ -1,22 +1,21 @@
 // import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'dart:io';
+
+import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:sgs_app/widgets/pdf/save_pdf_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:io';
+
+import '../../provider/core_provider.dart';
+import '../../provider/sgs_provider.dart';
 import 'exporter_sgs_fields.dart';
 import 'importer_sgs_fields.dart';
-import 'pdf_screen.dart';
-import '../../provider/sgs_provider.dart';
-import '../../provider/core_provider.dart';
 
 class SgsForm extends StatefulWidget {
   @override
@@ -25,41 +24,54 @@ class SgsForm extends StatefulWidget {
 
 class _SgsFormState extends State<SgsForm> {
   String currentText = "";
-  TextEditingController exporterNameController = new TextEditingController();
-  TextEditingController exporterAddressController = new TextEditingController();
-  TextEditingController importerNameController = new TextEditingController();
-  TextEditingController importerAddressController = new TextEditingController();
-  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
-  GlobalKey<AutoCompleteTextFieldState<String>> key2 = new GlobalKey();
-  GlobalKey<AutoCompleteTextFieldState<String>> key3 = new GlobalKey();
-  GlobalKey<AutoCompleteTextFieldState<String>> key4 = new GlobalKey();
+  // TextEditingController exporterNameController = new TextEditingController();
+  // TextEditingController exporterAddressController = new TextEditingController();
+  // TextEditingController importerNameController = new TextEditingController();
+  // TextEditingController importerAddressController = new TextEditingController();
+  // GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> key2 = new GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> key3 = new GlobalKey();
+  // GlobalKey<AutoCompleteTextFieldState<String>> key4 = new GlobalKey();
   // GlobalKey key = new GlobalKey();
   // GlobalKey key2 = new GlobalKey();
   // GlobalKey key3 = new GlobalKey();
   // GlobalKey key4 = new GlobalKey();
 
-  File? file;
-  FilePickerResult? result;
-  bool isLoading = false;
-  final _formKey = GlobalKey<FormState>();
-
   void _launchURL(_url) async => await canLaunch(_url)
       ? await launch(_url)
       : throw 'Could not launch $_url';
 
-  Map formData = {};
+  // Map formData = {};
 
   @override
   Widget build(BuildContext context) {
+    final prov = Provider.of<Sgs>(context, listen: false);
+    TextEditingController exporterNameController = prov.exporterNameController;
+    TextEditingController exporterAddressController =
+        prov.exporterAddressController;
+    TextEditingController importerNameController = prov.importerNameController;
+    TextEditingController importerAddressController =
+        prov.importerAddressController;
+    GlobalKey<AutoCompleteTextFieldState<String>> key = prov.key;
+    GlobalKey<AutoCompleteTextFieldState<String>> key2 = prov.key2;
+    GlobalKey<AutoCompleteTextFieldState<String>> key3 = prov.key3;
+    GlobalKey<AutoCompleteTextFieldState<String>> key4 = prov.key4;
+    // File? file = prov.file;
+    // FilePickerResult? result = prov.result;
+    // final _formKey = prov.formKey;
+
+    Map formData = prov.formData;
+
     Map<String, String> companies = {
       "Truckland Aps": "Højbjerg Huse 7, 8840 Rødkærsbro, Danimarka",
       "Hoplog Oy": "Keskikankaantie 28, 15860 Hollola, Finlandiya",
     };
+
     FirebaseAuth auth = FirebaseAuth.instance;
     return Padding(
       padding: EdgeInsets.all(20),
       child: Form(
-        key: _formKey,
+        key: prov.formKey,
         child: Column(
           children: [
             Expanded(
@@ -78,32 +90,7 @@ class _SgsFormState extends State<SgsForm> {
                     key,
                     key2,
                   ),
-                  // TextFormField(
-                  //   validator: (value) {
-                  //     if (value == "") return "Firma Ismini Girin";
 
-                  //     return null;
-                  //   },
-                  //   textInputAction: TextInputAction.next,
-                  //   decoration: InputDecoration(labelText: "Firma İsmi"),
-                  //   onSaved: (newValue) {
-                  //     formData["exporterCompany"] = newValue;
-                  //   },
-                  // ),
-                  // SizedBox(height: 10),
-                  // TextFormField(
-                  //   validator: (value) {
-                  //     if (value == "") return "Adresi Girin";
-
-                  //     return null;
-                  //   },
-                  //   textInputAction: TextInputAction.next,
-                  //   onSaved: (newValue) {
-                  //     formData["exporterAddress"] = newValue;
-                  //   },
-                  //   decoration: InputDecoration(labelText: "Firma Adresi"),
-                  // ),
-                  // SizedBox(height: 20),
                   Text(
                     "İthalatçı",
                     style: TextStyle(fontSize: 20),
@@ -116,38 +103,7 @@ class _SgsFormState extends State<SgsForm> {
                     key3,
                     key4,
                   ),
-                  // SizedBox(height: 10),
-                  // TextFormField(
-                  //   validator: (value) {
-                  //     if (value == "") return "Firma İsmini Girin";
 
-                  //     return null;
-                  //   },
-                  //   textInputAction: TextInputAction.next,
-                  //   onSaved: (newValue) {
-                  //     formData["importerCompany"] = newValue;
-                  //   },
-                  //   decoration: InputDecoration(labelText: "Firma İsmi"),
-                  // ),
-                  // SizedBox(height: 10),
-                  // TextFormField(
-                  //   validator: (value) {
-                  //     if (value == "") return "Adresi Girin";
-
-                  //     return null;
-                  //   },
-                  //   textInputAction: TextInputAction.next,
-                  //   onSaved: (newValue) {
-                  //     formData["importerAddress"] = newValue;
-                  //   },
-                  //   decoration: InputDecoration(labelText: "Firma Adresi"),
-                  // ),
-                  // Text(
-                  //   "Fatura",
-                  //   style: TextStyle(fontSize: 20),
-                  // ),
-                  // Divider(),
-                  // SizedBox(height: 10),
                   TextFormField(
                     validator: (value) {
                       if (value == "") return "Fatura No ve Tarihi Girin";
@@ -173,135 +129,34 @@ class _SgsFormState extends State<SgsForm> {
                     },
                     decoration: InputDecoration(labelText: "Vin Numarası"),
                   ),
+                  SizedBox(height: 10),
                   TextButton(
-                    child: Text(file != null
-                        ? file!.path.split("/").last
-                        : "Faturayı Yükle"),
+                    child: kIsWeb
+                        ? Text(
+                            prov.result?.files.single.name ?? "Faturayı Yükle")
+                        : Text(prov.file != null
+                            ? prov.file!.path.split("/").last
+                            : "Faturayı Yükle"),
                     onPressed: () async {
-                      result = await FilePicker.platform.pickFiles(
+                      prov.result = await FilePicker.platform.pickFiles(
                         type: FileType.image,
                       );
 
-                      if (!kIsWeb && result != null) {
+                      setState(() {});
+
+                      if (!kIsWeb && prov.result != null) {
                         setState(() {
-                          file = File((result!.files.single.path as String));
+                          prov.file =
+                              File((prov.result!.files.single.path as String));
                         });
                       } else {
                         // User canceled the picker
                       }
                     },
                   ),
-                  // SizedBox(height: 20),
-                  isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : ElevatedButton(
-                          onPressed: () async {
-                            bool isValid = _formKey.currentState!.validate();
-                            if (result == null)
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.red,
-                                  content: Text("Resim Seçin"),
-                                ),
-                              );
-                            if (!isValid) return;
-                            _formKey.currentState?.save();
+                  if (kIsWeb) SizedBox(height: 10),
 
-                            formData["exporterAddress"] =
-                                exporterAddressController.text.trim();
-                            formData["exporterCompany"] =
-                                exporterNameController.text.trim();
-
-                            formData["importerAddress"] =
-                                importerAddressController.text.trim();
-                            formData["importerCompany"] =
-                                importerNameController.text.trim();
-
-                            // return;
-                            setState(() {
-                              isLoading = true;
-                            });
-                            if (result != null) {
-                              if (kIsWeb) {
-                                print(12);
-                                await Provider.of<Sgs>(context, listen: false)
-                                    .sendFormm(formData, result);
-                              } else {
-                                print(13);
-                                final bytes = await file!.readAsBytes();
-                                print(bytes.length);
-                                // return;
-                                await Provider.of<Sgs>(context, listen: false)
-                                    .sendFormMobile(formData, bytes);
-                              }
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Oluşturuldu"),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                            } else {}
-
-                            setState(() {
-                              isLoading = false;
-                            });
-
-                            final url =
-                                await Provider.of<Core>(context, listen: false)
-                                    .getPdfUrl(formData["vinNumber"]);
-
-                            DocumentSnapshot snapshot = await FirebaseFirestore
-                                .instance
-                                .collection("files")
-                                .doc(formData["vinNumber"])
-                                .get();
-
-                            if (snapshot.exists)
-                              await FirebaseFirestore.instance
-                                  .collection("files")
-                                  .doc(formData["vinNumber"])
-                                  .update({
-                                'pdf': true,
-                                'date': DateTime.now(),
-                                'exporterCompany': formData["exporterCompany"],
-                                'exporterAddress': formData["exporterAddress"],
-                                'contactPerson': 'KENDAL DENIZ',
-                                'email': 'kendalkendalo@hotmail.com',
-                                'phone': '00905325664883',
-                                'importerCompany': formData["importerCompany"],
-                                'importerAddress': formData["importerAddress"],
-                                'invoiceNoDate': formData["invoiceNoDate"],
-                                'vinNumber': formData["vinNumber"],
-                                'pdfUrl': url,
-                                'uid': auth.currentUser?.uid,
-                              });
-                            else {
-                              await FirebaseFirestore.instance
-                                  .collection("files")
-                                  .doc(formData["vinNumber"])
-                                  .set({
-                                'pdf': true,
-                                'xlsx': false,
-                                'date': DateTime.now(),
-                                'exporterCompany': formData["exporterCompany"],
-                                'exporterAddress': formData["exporterAddress"],
-                                'contactPerson': 'KENDAL DENIZ',
-                                'email': 'kendalkendalo@hotmail.com',
-                                'phone': '00905325664883',
-                                'importerCompany': formData["importerCompany"],
-                                'importerAddress': formData["importerAddress"],
-                                'invoiceNoDate': formData["invoiceNoDate"],
-                                'vinNumber': formData["vinNumber"],
-                                'pdfUrl': url,
-                                'uid': auth.currentUser?.uid,
-                              });
-                            }
-
-                            await launch(url);
-                            return;
-                          },
-                          child: Text("kaydet"),
-                        ),
+                  SavePdfButton()
                 ],
               ),
             ),

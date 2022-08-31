@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'login_screen.dart';
 import 'pdf/sgs_form.dart';
@@ -48,11 +49,11 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: index == 1
-            ? Colors.red
-            : index == 2
-                ? Colors.green
-                : Colors.blue,
+        // selectedItemColor: index == 1
+        //     ? Colors.red
+        //     : index == 2
+        //         ? Colors.green
+        //         : Colors.blue,
         currentIndex: index,
         onTap: (value) {
           setState(() {
@@ -61,23 +62,23 @@ class _BottomNavbarScreenState extends State<BottomNavbarScreen> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              // color: Colors.green,
+            icon: FaIcon(
+              FontAwesomeIcons.home,
+              color: index == 0 ? Colors.blue : Colors.grey,
             ),
-            label: "home",
+            label: "Ana Sayfa",
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.assignment,
-              // color: Colors.red,
+            icon: FaIcon(
+              FontAwesomeIcons.filePdf,
+              color: index == 1 ? Colors.red : Colors.grey,
             ),
             label: "pdf",
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.assignment,
-              // color: Colors.green,
+            icon: FaIcon(
+              FontAwesomeIcons.fileExcel,
+              color: index == 2 ? Colors.green : Colors.grey,
             ),
             label: "xlsx",
           ),

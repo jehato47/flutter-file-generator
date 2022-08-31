@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'file_detail_screen.dart';
@@ -42,12 +43,28 @@ class _FileListScreenState extends State<FileListScreen> {
             ),
           );
         }
-
-        return ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (context, index) => FileItem(
-            item: data[index],
-            number: data.length - index,
+        bool isScreenWide = MediaQuery.of(context).size.width > 700;
+        return Padding(
+          padding: EdgeInsets.all(isScreenWide && kIsWeb ? 10 : 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (kIsWeb && isScreenWide)
+                Text(
+                  "Olusturduğunuz Dosyalar",
+                  style: TextStyle(fontSize: 20),
+                ),
+              if (kIsWeb && isScreenWide) Divider(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) => FileItem(
+                    item: data[index],
+                    number: data.length - index,
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },

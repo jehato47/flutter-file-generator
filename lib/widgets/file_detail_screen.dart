@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'mail_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -141,7 +143,7 @@ class _FileDetailScreenState extends State<FileDetailScreen> {
                   builder: (context) => MailDialog(args),
                 );
               },
-              icon: Icon(Icons.mail),
+              icon: FaIcon(FontAwesomeIcons.envelope),
             ),
           ],
         ),

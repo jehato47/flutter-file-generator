@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sgs_app/provider/sgs_provider.dart';
+import 'package:sgs_app/widgets/xlsx/save_xlsx_button.dart';
 import '../../provider/core_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,17 +13,19 @@ class XlsxForm extends StatefulWidget {
 
 class _XlsxFormState extends State<XlsxForm> {
   bool isLoading = false;
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
 
-  Map<String, dynamic> formData = {};
+  // Map<String, dynamic> formData = {};
 
   @override
   Widget build(BuildContext context) {
+    final prov = Provider.of<Sgs>(context, listen: false);
+
     FirebaseAuth auth = FirebaseAuth.instance;
     return Padding(
       padding: EdgeInsets.all(20),
       child: Form(
-        key: _formKey,
+        key: prov.xlsxFormKey,
         child: ListView(
           children: [
             Text(
@@ -39,7 +43,7 @@ class _XlsxFormState extends State<XlsxForm> {
               },
               textInputAction: TextInputAction.next,
               onSaved: (newValue) {
-                formData["carBrand"] = newValue;
+                prov.xlsxFormData["carBrand"] = newValue;
               },
               decoration: InputDecoration(labelText: "Araç Marka"),
             ),
@@ -52,7 +56,7 @@ class _XlsxFormState extends State<XlsxForm> {
               },
               textInputAction: TextInputAction.next,
               onSaved: (newValue) {
-                formData["carModel"] = newValue;
+                prov.xlsxFormData["carModel"] = newValue;
               },
               decoration: InputDecoration(labelText: "Araç Model"),
             ),
@@ -61,7 +65,7 @@ class _XlsxFormState extends State<XlsxForm> {
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.number,
               onSaved: (newValue) {
-                formData["carYear"] = newValue;
+                prov.xlsxFormData["carYear"] = newValue;
               },
               validator: (value) {
                 dynamic v;
@@ -97,7 +101,7 @@ class _XlsxFormState extends State<XlsxForm> {
                 return null;
               },
               onSaved: (newValue) {
-                formData["old"] = newValue;
+                prov.xlsxFormData["old"] = newValue;
               },
               decoration: InputDecoration(labelText: "Yaş"),
             ),
@@ -110,7 +114,7 @@ class _XlsxFormState extends State<XlsxForm> {
               },
               textInputAction: TextInputAction.next,
               onSaved: (newValue) {
-                formData["country"] = newValue;
+                prov.xlsxFormData["country"] = newValue;
               },
               decoration: InputDecoration(labelText: "Ülke"),
             ),
@@ -123,86 +127,12 @@ class _XlsxFormState extends State<XlsxForm> {
               },
               textInputAction: TextInputAction.next,
               onSaved: (newValue) {
-                formData["vinNumber"] = newValue;
+                prov.xlsxFormData["vinNumber"] = newValue;
               },
               decoration: InputDecoration(labelText: "Vin Numarası"),
             ),
             SizedBox(height: 10),
-            isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : ElevatedButton(
-                    onPressed: () async {
-                      bool isValid = _formKey.currentState!.validate();
-                      print(isValid);
-                      if (!isValid) return;
-
-                      // return;
-                      setState(() {
-                        isLoading = true;
-                      });
-                      _formKey.currentState!.save();
-                      print(formData);
-
-                      await Provider.of<Core>(context, listen: false)
-                          .createXlsx(formData);
-                      setState(() {
-                        isLoading = false;
-                      });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Oluşturuldu indirme başlıyor"),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-
-                      final url =
-                          await Provider.of<Core>(context, listen: false)
-                              .getXlsxUrl(formData["vinNumber"]);
-
-                      DocumentSnapshot snapshot = await FirebaseFirestore
-                          .instance
-                          .collection("files")
-                          .doc(formData["vinNumber"])
-                          .get();
-
-                      if (snapshot.exists)
-                        await FirebaseFirestore.instance
-                            .collection("files")
-                            .doc(formData["vinNumber"])
-                            .update({
-                          'xlsx': true,
-                          'carBrand': formData["carBrand"],
-                          'carModel': formData["carModel"],
-                          'carYear': formData["carYear"],
-                          'old': formData['old'],
-                          'country': formData['country'],
-                          'vinNumber': formData['vinNumber'],
-                          'url': url,
-                          'uid': auth.currentUser?.uid,
-                        });
-                      else {
-                        await FirebaseFirestore.instance
-                            .collection("files")
-                            .doc(formData["vinNumber"])
-                            .set({
-                          'pdf': false,
-                          'xlsx': true,
-                          'date': DateTime.now(),
-                          'carBrand': formData["carBrand"],
-                          'carModel': formData["carModel"],
-                          'carYear': formData["carYear"],
-                          'old': formData['old'],
-                          'country': formData['country'],
-                          'vinNumber': formData['vinNumber'],
-                          'url': url,
-                          'uid': auth.currentUser?.uid,
-                        });
-                      }
-                    },
-                    child: Text("Oluştur"),
-                  )
+            SaveXlsxButton(),
           ],
         ),
       ),

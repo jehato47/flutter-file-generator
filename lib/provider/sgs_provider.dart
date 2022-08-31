@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-
+import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -7,6 +7,24 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class Sgs extends ChangeNotifier {
+  // Pdf ***************************
+  TextEditingController exporterNameController = new TextEditingController();
+  TextEditingController exporterAddressController = new TextEditingController();
+  TextEditingController importerNameController = new TextEditingController();
+  TextEditingController importerAddressController = new TextEditingController();
+  GlobalKey<AutoCompleteTextFieldState<String>> key = new GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<String>> key2 = new GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<String>> key3 = new GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<String>> key4 = new GlobalKey();
+  Map formData = {};
+  File? file;
+  FilePickerResult? result;
+  final formKey = GlobalKey<FormState>();
+
+  // Xlsx ***************************
+  final xlsxFormKey = GlobalKey<FormState>();
+  Map<String, dynamic> xlsxFormData = {};
+
   Future<void> sendFormm(dynamic formData, FilePickerResult? result) async {
     var dio = Dio();
     dio.options.baseUrl = 'https://jehat22.pythonanywhere.com/';
@@ -15,9 +33,9 @@ class Sgs extends ChangeNotifier {
     _formData = FormData.fromMap({
       'exporterCompany': formData["exporterCompany"],
       'exporterAddress': formData["exporterAddress"],
-      'contactPerson': 'KENDAL DENIZ',
-      'email': 'kendalkendalo@hotmail.com',
-      'phone': '00905325664883',
+      'contactPerson': 'Israfil Caglar Solgun',
+      'email': 'caglars@hotmail.de',
+      'phone': '00905366896550',
       'importerCompany': formData["importerCompany"],
       'importerAddress': formData["importerAddress"],
       'invoiceNoDate': formData["invoiceNoDate"],
@@ -49,9 +67,9 @@ class Sgs extends ChangeNotifier {
     _formData = FormData.fromMap({
       'exporterCompany': formData["exporterCompany"],
       'exporterAddress': formData["exporterAddress"],
-      'contactPerson': 'KENDAL DENIZ',
-      'email': 'kendalkendalo@hotmail.com',
-      'phone': '00905325664883',
+      'contactPerson': 'Israfil Caglar Solgun',
+      'email': 'caglars@hotmail.de',
+      'phone': '00905366896550',
       'importerCompany': formData["importerCompany"],
       'importerAddress': formData["importerAddress"],
       'invoiceNoDate': formData["invoiceNoDate"],
@@ -74,4 +92,6 @@ class Sgs extends ChangeNotifier {
       print(err);
     }
   }
+
+  void formHelper() {}
 }

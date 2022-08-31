@@ -11,7 +11,9 @@ class MailDialog extends StatefulWidget {
 }
 
 class _MailDialogState extends State<MailDialog> {
+  bool showErrorText = false;
   String? msg;
+
   void selectMessage() {
     bool haveXlsx = args["xlsx"];
     bool havePdf = args["pdf"];
@@ -95,6 +97,8 @@ class _MailDialogState extends State<MailDialog> {
   @override
   Widget build(BuildContext context) {
     args = widget.args;
+    bool haveXlsx = args["xlsx"];
+    bool havePdf = args["pdf"];
 
     // bool pdfon = args["xlsx"];
     // bool xlsxon = args["pdf"];
@@ -109,54 +113,53 @@ class _MailDialogState extends State<MailDialog> {
             //   controller: _controller,
             //   decoration: InputDecoration(hintText: "email"),
             // ),
-            CheckboxListTile(
-              secondary: Icon(
-                Icons.assignment,
-                color: Colors.red,
+            if (havePdf)
+              CheckboxListTile(
+                secondary: Icon(
+                  Icons.assignment,
+                  color: Colors.red,
+                ),
+                title: Text("pdf"),
+                value: pdfon,
+                onChanged: (value) {
+                  if (havePdf) {
+                    setState(() {
+                      pdfon = !pdfon;
+                    });
+                  }
+                },
               ),
-              title: Text("pdf"),
-              value: pdfon,
-              onChanged: (value) {
-                setState(() {
-                  pdfon = !pdfon;
-                });
-              },
-            ),
-            CheckboxListTile(
-              title: Text("xlsx"),
-              secondary: Icon(
-                Icons.assignment,
-                color: Colors.green,
+            if (haveXlsx)
+              CheckboxListTile(
+                title: Text("xlsx"),
+                secondary: Icon(
+                  Icons.assignment,
+                  color: Colors.green,
+                ),
+                value: xlsxon,
+                onChanged: (value) {
+                  if (haveXlsx) {
+                    setState(() {
+                      xlsxon = !xlsxon;
+                    });
+                  }
+                },
               ),
-              value: xlsxon,
-              onChanged: (value) {
-                setState(() {
-                  xlsxon = !xlsxon;
-                });
-              },
-            ),
+            if (!pdfon & !xlsxon & showErrorText)
+              Text(
+                "Seçim Yapmadınız",
+                style: TextStyle(color: Theme.of(context).hintColor),
+              ),
             ElevatedButton(
                 onPressed: () async {
-                  // if (_controller.text.isEmpty) return;
-                  // if (!_controller.text.contains("@")) return;
-                  // if (!_controller.text.contains(".com")) return;
-                  // if (xlsxon && pdfon) {
-                  //   print("both");
-                  //   return;
-                  // }
+                  if (!pdfon & !xlsxon) {
+                    setState(() {
+                      showErrorText = true;
+                    });
+                    return;
+                  }
 
-                  // if (xlsxon) {
-                  //   print(args["url"]);
-                  //   print("xlsx");
-                  //   return;
-                  // }
-                  // if (pdfon) {
-                  //   print("pdf");
-                  //   return;
-                  // }
-                  // if (xlsxon) print("xlsx");
                   selectMessage();
-                  // print(msg);
                   await FirebaseFirestore.instance.collection("mail").add({
                     "to": [FirebaseAuth.instance.currentUser?.email],
                     "message": {
