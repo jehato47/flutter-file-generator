@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../provider/core_provider.dart';
-import 'file_detail_screen.dart';
+import '../screens/file_detail_screen.dart';
 import 'manage_form.dart';
 import 'pdf/pdf_screen.dart';
 
@@ -104,34 +104,36 @@ class FileItem extends StatelessWidget {
         //     onTap: () async {},
         //   ),
       ],
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.grey[300],
-          child: Text(
-            number.toString(),
-            style: TextStyle(color: Colors.black),
+      child: Card(
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.grey[300],
+            child: Text(
+              number.toString(),
+              style: TextStyle(color: Colors.black),
+            ),
           ),
-        ),
-        onLongPress: () {
-          Navigator.of(context).pushNamed(ManageForm.url, arguments: item);
-        },
-        onTap: () {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //   builder: (context) => ManageForm(),
-          // ));
+          onLongPress: () {
+            Navigator.of(context).pushNamed(ManageForm.url, arguments: item);
+          },
+          onTap: () {
+            // Navigator.of(context).push(MaterialPageRoute(
+            //   builder: (context) => ManageForm(),
+            // ));
 
-          // return;
-          Navigator.of(context)
-              .pushNamed(FileDetailScreen.url, arguments: item);
-        },
-        title: Text(
-          item["xlsx"]
-              ? item["carBrand"] + " " + item["carModel"]
-              : item["exporterAddress"],
-          style: TextStyle(fontWeight: FontWeight.bold),
+            // return;
+            Navigator.of(context)
+                .pushNamed(FileDetailScreen.url, arguments: item);
+          },
+          title: Text(
+            item["xlsx"]
+                ? item["carBrand"] + " " + item["carModel"]
+                : item["exporterAddress"],
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(item["vinNumber"]),
+          trailing: Text(DateFormat().add_yMd().format(item["date"].toDate())),
         ),
-        subtitle: Text(item["vinNumber"]),
-        trailing: Text(DateFormat().add_yMd().format(item["date"].toDate())),
       ),
       actionPane: SlidableDrawerActionPane(),
     );

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../file_list_screen.dart';
+import '../../screens/file_list_screen.dart';
+import '../../screens/profile_screen.dart';
 import '../pdf/sgs_form.dart';
 import '../xlsx/xlsx_form.dart';
 
@@ -29,25 +30,44 @@ class _WebNavRailScreenState extends State<WebNavRailScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Sgs Düzenleyici"),
+        // title: Text("Sgs Düzenleyici"),
         actions: [
           auth.currentUser?.photoURL != null
-              ? CircleAvatar(
-                  backgroundImage: NetworkImage(profileImage ?? ""),
+              ? GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      ProfileScreen.url,
+                    );
+                  },
+                  child: Hero(
+                    tag: profileImage!,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(profileImage ?? ""),
+                    ),
+                  ),
                 )
-              : Container(),
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              final isSignedIn = await GoogleSignIn().isSignedIn();
-              if (isSignedIn) await GoogleSignIn().signOut();
+              : IconButton(
+                  icon: FaIcon(
+                    FontAwesomeIcons.solidUser,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                      ProfileScreen.url,
+                    );
+                  },
+                ),
+          // IconButton(
+          //   icon: Icon(Icons.logout),
+          //   onPressed: () async {
+          //     await FirebaseAuth.instance.signOut();
+          //     final isSignedIn = await GoogleSignIn().isSignedIn();
+          //     if (isSignedIn) await GoogleSignIn().signOut();
 
-              // Navigator.of(context).pushReplacement(MaterialPageRoute(
-              //   builder: (context) => LoginScreen(),
-              // ));
-            },
-          )
+          //     // Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //     //   builder: (context) => LoginScreen(),
+          //     // ));
+          // },
+          // )
         ],
       ),
       body: Row(
@@ -113,7 +133,7 @@ class _WebNavRailScreenState extends State<WebNavRailScreen> {
           VerticalDivider(thickness: 1),
           Expanded(
             child: bodies[index],
-            flex: 4,
+            flex: 3,
           ),
           // Expanded(
           //   child: Container(),

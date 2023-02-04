@@ -3,8 +3,12 @@ import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:google_geocoding/google_geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+
+import '../screens/map_screen.dart';
 
 class Sgs extends ChangeNotifier {
   // Pdf ***************************
@@ -91,6 +95,27 @@ class Sgs extends ChangeNotifier {
     } catch (err) {
       print(err);
     }
+  }
+
+  Future<void> showInMap(BuildContext context, String address) async {
+    var googleGeocoding =
+        GoogleGeocoding("AIzaSyC1VRXx_dWi58eIf-lWpIwtA5ClJYlAoDw");
+    var risult = await googleGeocoding.geocoding.get(address, []);
+
+    print(risult!.results![0].geometry!.location!.lng);
+    // setState(() {
+    var latLng = LatLng(
+      risult.results![0].geometry!.location!.lat!,
+      risult.results![0].geometry!.location!.lng!,
+    );
+    // });
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return MapScreen(
+          latLng: latLng,
+        );
+      },
+    ));
   }
 
   void formHelper() {}

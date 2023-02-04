@@ -5,16 +5,22 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutterfire_ui/i10n.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sgs_app/firebase_options.dart';
+import 'package:sgs_app/screens/detail_tab_screen.dart';
+import 'package:sgs_app/screens/pick_spage_screen.dart';
+import 'package:sgs_app/screens/profile_screen.dart';
+import 'package:sgs_app/widgets/firebase.dart';
 
 import 'helpers/localization.dart';
 import 'provider/auth_provider.dart';
 import 'provider/core_provider.dart';
 import 'provider/sgs_provider.dart';
-import 'widgets/file_detail_screen.dart';
+import 'screens/file_detail_screen.dart';
 import 'widgets/home/auth_gate.dart';
 import 'widgets/manage_form.dart';
 
 Future<void> main() async {
+  // Flutter Version 2.10.3
   WidgetsFlutterBinding.ensureInitialized();
   Intl.defaultLocale = 'tr_TR';
 
@@ -36,43 +42,61 @@ class MyApp extends StatelessWidget {
           create: (context) => Auth(),
         ),
       ],
-      child: FutureBuilder(
-        future: Firebase.initializeApp(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      child: MaterialApp(
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.greyLaw),
+        themeMode: ThemeMode.dark,
+        theme: ThemeData(
+          primarySwatch: Colors.teal,
+        ),
+        localizationsDelegates: [
+          FlutterFireUILocalizations.withDefaultOverrides(
+            LabelOverrides(),
+          ),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          FlutterFireUILocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('tr'),
+          Locale('en'),
+        ],
+        locale: const Locale('tr'),
 
-          return MaterialApp(
-            darkTheme: FlexThemeData.dark(scheme: FlexScheme.greyLaw),
-            themeMode: ThemeMode.dark,
-            theme: ThemeData(
-              primarySwatch: Colors.teal,
+        debugShowCheckedModeBanner: false,
+        title: 'SGS GENERATOR',
+        home: Scaffold(
+          body: FutureBuilder(
+            future: Firebase.initializeApp(
+              options: DefaultFirebaseOptions.currentPlatform,
+              // name: "initial",
             ),
-            localizationsDelegates: [
-              FlutterFireUILocalizations.withDefaultOverrides(
-                LabelOverrides(),
-              ),
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              FlutterFireUILocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('tr'),
-              Locale('en'),
-            ],
-            locale: const Locale('tr'),
-            routes: {
-              FileDetailScreen.url: (context) => FileDetailScreen(),
-              ManageForm.url: (context) => ManageForm(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(snapshot.error.toString()),
+                );
+              }
+
+              if (snapshot.hasData) {
+                return AuthGate();
+              }
+
+              return Container();
             },
-            debugShowCheckedModeBanner: false,
-            title: 'SGS GENERATOR',
-            home: AuthGate(),
-            // home: AuthGate(),
-          );
+          ),
+        ),
+        // home: AuthGate(),
+        routes: {
+          FileDetailScreen.url: (context) => FileDetailScreen(),
+          ManageForm.url: (context) => ManageForm(),
+          ProfileScreen.url: (context) => ProfileScreen(),
+          PickSecondPageScreen.url: (context) => PickSecondPageScreen(),
+          DetailTabScreen.url: (context) => DetailTabScreen(),
         },
       ),
     );

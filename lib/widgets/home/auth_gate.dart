@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sgs_app/widgets/home/web_navrail_screen.dart';
 
-import '../bottom_navbar.dart';
+import '../../screens/bottom_navbar.dart';
 import '../login/firebase_login.dart';
 
 class AuthGate extends StatelessWidget {
