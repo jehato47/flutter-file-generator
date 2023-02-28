@@ -73,6 +73,7 @@ class _FirebaseScreenState extends State<FirebaseScreen> {
                   .toList();
 
               return ListView.builder(
+                itemCount: addresses.length,
                 itemBuilder: (context, index) => ListTile(
                   leading: CircleAvatar(
                       child: Text((addresses.length - index).toString())),
@@ -84,10 +85,11 @@ class _FirebaseScreenState extends State<FirebaseScreen> {
                       var risult = await googleGeocoding.geocoding
                           .get(data[index]["exporterAddress"], []);
 
-                      print(risult!.results![0].geometry!.location!.lng);
+                      // print(risult!.results![0].geometry!.location!.lng);
+                      print(addresses);
                       // setState(() {
                       latLng = LatLng(
-                        risult.results![0].geometry!.location!.lat!,
+                        risult!.results![0].geometry!.location!.lat!,
                         risult.results![0].geometry!.location!.lng!,
                       );
                       // });
@@ -101,7 +103,6 @@ class _FirebaseScreenState extends State<FirebaseScreen> {
                     }
                   },
                 ),
-                itemCount: data.length,
               );
               return Center(
                 child: ElevatedButton(
